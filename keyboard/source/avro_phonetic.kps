@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package>
+  <System>
+    <KeymanDeveloperVersion>18.0.252</KeymanDeveloperVersion>
+    <FileVersion>7.0</FileVersion>
+  </System>
+  <Options>
+    <FollowKeyboardVersion />
+    <LicenseFile>..\..\third_party\jsAvroPhonetic\MPL-1.1.txt</LicenseFile>
+  </Options>
+  <Info>
+    <Name>Bangla Avro Phonetic</Name>
+    <Copyright>© 2026 Gachlagan contributors; Avro rules © OmicronLab</Copyright>
+    <Author>Gachlagan contributors</Author>
+    <Description>Offline Bangla input using the open-source Avro Phonetic rules.</Description>
+  </Info>
+  <Files>
+    <File>
+      <Name>..\build\avro_phonetic.js</Name>
+      <Description>Bangla Avro Phonetic touch keyboard</Description>
+      <CopyLocation>0</CopyLocation>
+      <FileType>.js</FileType>
+    </File>
+    <File>
+      <Name>..\..\third_party\jsAvroPhonetic\MPL-1.1.txt</Name>
+      <Description>jsAvroPhonetic license</Description>
+      <CopyLocation>0</CopyLocation>
+      <FileType>.txt</FileType>
+    </File>
+  </Files>
+  <Keyboards>
+    <Keyboard>
+      <Name>Bangla Avro Phonetic</Name>
+      <ID>avro_phonetic</ID>
+      <Version>1.0</Version>
+      <Languages>
+        <Language ID="bn">Bangla</Language>
+      </Languages>
+      <Examples>
+        <Example ID="bn" Keys="a m i space b a n g l a y" Text="আমি বাংলায়" Note="Type Bangla phonetically" />
+      </Examples>
+    </Keyboard>
+  </Keyboards>
+</Package>

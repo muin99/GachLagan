@@ -1,0 +1,22 @@
+{
+  "name": "gachlagan-keyboard",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Offline cross-platform Bangla system keyboard with Avro Phonetic support",
+  "license": "MIT",
+  "scripts": {
+    "build:keyboard": "kmc build keyboard/avro_phonetic.kpj",
+    "sync:keyboard": "bash scripts/sync-keyboard.sh",
+    "test": "node --test tests/*.test.js",
+    "verify": "npm run test && npm run build:keyboard && npm run sync:keyboard"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@keymanapp/kmc": "18.0.252",
+    "@playwright/test": "1.63.0",
+    "esbuild": "0.28.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

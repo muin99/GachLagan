@@ -1,0 +1,9 @@
+.DS_Store
+node_modules/
+Carthage/
+mobile/android/.gradle/
+mobile/android/local.properties
+mobile/android/**/build/
+mobile/ios/DerivedData/
+mobile/ios/*.xcworkspace/xcuserdata/
+mobile/ios/*.xcodeproj/xcuserdata/

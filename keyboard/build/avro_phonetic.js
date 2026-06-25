@@ -1,0 +1,2066 @@
+if(typeof keyman === 'undefined') {console.log('Keyboard requires KeymanWeb 10.0 or later');if(typeof tavultesoft !== 'undefined') tavultesoft.keymanweb.util.alert("This keyboard requires KeymanWeb 10.0 or later");} else {KeymanWeb.KR(new Keyboard_avro_phonetic());}function Keyboard_avro_phonetic(){this._v=(typeof keyman!="undefined"&&typeof keyman.version=="string")?parseInt(keyman.version,10):9;this.KI="Keyboard_avro_phonetic";this.KN="Bangla Avro Phonetic";this.KMINVER="17.0";this.KV=null;this.KDU=0;this.KH='';this.KM=0;this.KBVER="1.0";this.KMBM=0x10;this.KVKL={"tablet":{"displayUnderlying":false,"layer":[{"id":"default","row":[{"id":"1","key":[{"id":"K_1","text":"1"},{"id":"K_2","text":"2"},{"id":"K_3","text":"3"},{"id":"K_4","text":"4"},{"id":"K_5","text":"5"},{"id":"K_6","text":"6"},{"id":"K_7","text":"7"},{"id":"K_8","text":"8"},{"id":"K_9","text":"9"},{"id":"K_0","text":"0"},{"id":"K_HYPHEN","text":"-"},{"id":"K_EQUAL","text":"="},{"id":"K_BKSP","text":"*BkSp*","width":"100","sp":"1"}]},{"id":"2","key":[{"id":"K_Q","text":"q","pad":"75"},{"id":"K_W","text":"w"},{"id":"K_E","text":"e"},{"id":"K_R","text":"r"},{"id":"K_T","text":"t"},{"id":"K_Y","text":"y"},{"id":"K_U","text":"u"},{"id":"K_I","text":"i"},{"id":"K_O","text":"o"},{"id":"K_P","text":"p"},{"id":"K_LBRKT","text":"["},{"id":"K_RBRKT","text":"]"},{"id":"T_new_26","width":"10","sp":"10"}]},{"id":"3","key":[{"id":"K_A","text":"a","pad":"45"},{"id":"K_S","text":"s"},{"id":"K_D","text":"d"},{"id":"K_F","text":"f"},{"id":"K_G","text":"g"},{"id":"K_H","text":"h"},{"id":"K_J","text":"j"},{"id":"K_K","text":"k"},{"id":"K_L","text":"l"},{"id":"K_COLON","text":";"},{"id":"K_QUOTE","text":"'"},{"id":"K_BKSLASH","text":"\\"}]},{"id":"4","key":[{"id":"K_SHIFT","text":"*Shift*","width":"160","sp":"1","nextlayer":"shift"},{"id":"K_Z","text":"z"},{"id":"K_X","text":"x"},{"id":"K_C","text":"c"},{"id":"K_V","text":"v"},{"id":"K_B","text":"b"},{"id":"K_N","text":"n"},{"id":"K_M","text":"m"},{"id":"K_COMMA","text":","},{"id":"K_PERIOD","text":"."},{"id":"K_SLASH","text":"/"},{"id":"K_BKQUOTE","text":"`"},{"id":"T_new_52","width":"10","sp":"10"}]},{"id":"5","key":[{"id":"T_new_110","width":"130","sp":"10"},{"id":"K_LOPT","text":"*Menu*","width":"140","sp":"1"},{"id":"K_SPACE","width":"930"},{"id":"K_ENTER","text":"*Enter*","width":"145","sp":"1"}]}]},{"id":"shift","row":[{"id":"1","key":[{"id":"K_1","text":"!"},{"id":"K_2","text":"@"},{"id":"K_3","text":"#"},{"id":"K_4","text":"$"},{"id":"K_5","text":"%"},{"id":"K_6","text":"^"},{"id":"K_7","text":"&"},{"id":"K_8","text":"*"},{"id":"K_9","text":"("},{"id":"K_0","text":")"},{"id":"K_HYPHEN","text":"_"},{"id":"K_EQUAL","text":"+"},{"id":"K_BKSP","text":"*BkSp*","width":"100","sp":"1"}]},{"id":"2","key":[{"id":"K_Q","text":"Q","pad":"75"},{"id":"K_W","text":"W"},{"id":"K_E","text":"E"},{"id":"K_R","text":"R"},{"id":"K_T","text":"T"},{"id":"K_Y","text":"Y"},{"id":"K_U","text":"U"},{"id":"K_I","text":"I"},{"id":"K_O","text":"O"},{"id":"K_P","text":"P"},{"id":"K_LBRKT","text":"{"},{"id":"K_RBRKT","text":"}"},{"id":"T_new_82","width":"10","sp":"10"}]},{"id":"3","key":[{"id":"K_A","text":"A","pad":"45"},{"id":"K_S","text":"S"},{"id":"K_D","text":"D"},{"id":"K_F","text":"F"},{"id":"K_G","text":"G"},{"id":"K_H","text":"H"},{"id":"K_J","text":"J"},{"id":"K_K","text":"K"},{"id":"K_L","text":"L"},{"id":"K_COLON","text":":"},{"id":"K_QUOTE","text":"\""},{"id":"K_BKSLASH","text":"|"}]},{"id":"4","key":[{"id":"K_SHIFT","text":"*Shift*","width":"160","sp":"2","nextlayer":"default"},{"id":"K_Z","text":"Z"},{"id":"K_X","text":"X"},{"id":"K_C","text":"C"},{"id":"K_V","text":"V"},{"id":"K_B","text":"B"},{"id":"K_N","text":"N"},{"id":"K_M","text":"M"},{"id":"K_COMMA","text":"<"},{"id":"K_PERIOD","text":">"},{"id":"K_SLASH","text":"?"},{"id":"K_BKQUOTE","text":"~"},{"id":"T_new_108","width":"10","sp":"10"}]},{"id":"5","key":[{"id":"T_new_109","width":"130","sp":"10"},{"id":"K_LOPT","text":"*Menu*","width":"140","sp":"1"},{"id":"K_SPACE","width":"930"},{"id":"K_ENTER","text":"*Enter*","width":"145","sp":"1"}]}]}]},"phone":{"layer":[{"id":"default","row":[{"id":"1","key":[{"id":"K_Q","text":"q"},{"id":"K_W","text":"w"},{"id":"K_E","text":"e","sk":[{"text":"è","id":"U_00E8"},{"text":"é","id":"U_00E9"}]},{"id":"K_R","text":"r"},{"id":"K_T","text":"t"},{"id":"K_Y","text":"y"},{"id":"K_U","text":"u"},{"id":"K_I","text":"i"},{"id":"K_O","text":"o"},{"id":"K_P","text":"p"}]},{"id":"2","key":[{"id":"K_A","text":"a","pad":"40"},{"id":"K_S","text":"s"},{"id":"K_D","text":"d"},{"id":"K_F","text":"f"},{"id":"K_G","text":"g"},{"id":"K_H","text":"h"},{"id":"K_J","text":"j"},{"id":"K_K","text":"k"},{"id":"K_L","text":"l"},{"id":"K_QUOTE","text":"'"}]},{"id":"3","key":[{"id":"K_SHIFT","text":"*Shift*","width":"100","sp":"1","nextlayer":"shift"},{"id":"K_Z","text":"z"},{"id":"K_X","text":"x"},{"id":"K_C","text":"c"},{"id":"K_V","text":"v"},{"id":"K_B","text":"b"},{"id":"K_N","text":"n"},{"id":"K_M","text":"m"},{"id":"K_PERIOD","text":".","sk":[{"text":",","id":"K_COMMA"},{"text":";","id":"K_COLON"},{"text":":","id":"K_COLON","layer":"shift"},{"text":"?","id":"K_SLASH","layer":"shift"},{"text":"!","id":"K_1","layer":"shift"},{"text":"/","id":"K_SLASH"},{"text":"\\","id":"K_BKSLASH"}]},{"id":"K_BKSP","text":"*BkSp*","width":"100","sp":"1"}]},{"id":"4","key":[{"id":"K_NUMERALS","text":"*123*","width":"150","sp":"1","nextlayer":"numeric","sk":[{"text":"*Currency*","id":"K_CURRENCIES","sp":"1","nextlayer":"currency"},{"text":"*Symbol*","id":"K_SYMBOLS","sp":"1","nextlayer":"symbol"}]},{"id":"K_LOPT","text":"*Menu*","width":"100","sp":"1"},{"id":"T_new_34","width":"10","sp":"10"},{"id":"K_SPACE","width":"610"},{"id":"T_new_36","width":"10","sp":"10"},{"id":"K_ENTER","text":"*Enter*","width":"140","sp":"1"}]}]},{"id":"shift","row":[{"id":"1","key":[{"id":"K_Q","text":"Q"},{"id":"K_W","text":"W"},{"id":"K_E","text":"E","sk":[{"text":"È","id":"U_00C8"},{"text":"É","id":"U_00C9"}]},{"id":"K_R","text":"R"},{"id":"K_T","text":"T"},{"id":"K_Y","text":"Y"},{"id":"K_U","text":"U"},{"id":"K_I","text":"I"},{"id":"K_O","text":"O"},{"id":"K_P","text":"P"}]},{"id":"2","key":[{"id":"K_A","text":"A","pad":"40"},{"id":"K_S","text":"S"},{"id":"K_D","text":"D"},{"id":"K_F","text":"F"},{"id":"K_G","text":"G"},{"id":"K_H","text":"H"},{"id":"K_J","text":"J"},{"id":"K_K","text":"K"},{"id":"K_L","text":"L"},{"id":"K_QUOTE","text":"\""}]},{"id":"3","key":[{"id":"K_SHIFT","text":"*Shift*","width":"100","sp":"2","nextlayer":"default"},{"id":"K_Z","text":"Z"},{"id":"K_X","text":"X"},{"id":"K_C","text":"C"},{"id":"K_V","text":"V"},{"id":"K_B","text":"B"},{"id":"K_N","text":"N"},{"id":"K_M","text":"M"},{"id":"K_PERIOD","text":".","sk":[{"text":",","id":"K_COMMA"},{"text":";","id":"K_COLON"},{"text":":","id":"K_COLON","layer":"shift"},{"text":"?","id":"K_SLASH","layer":"shift"},{"text":"!","id":"K_1","layer":"shift"},{"text":"/","id":"K_SLASH"},{"text":"\\","id":"K_BKSLASH"}]},{"id":"K_BKSP","text":"*BkSp*","width":"100","sp":"1"}]},{"id":"4","key":[{"id":"K_NUMERALS","text":"*123*","width":"150","sp":"1","nextlayer":"numeric","sk":[{"text":"*Currency*","id":"K_CURRENCIES","sp":"1","nextlayer":"currency"},{"text":"*Symbol*","id":"K_SYMBOLS","sp":"1","nextlayer":"symbol"}]},{"id":"K_LOPT","text":"*Menu*","width":"100","sp":"1"},{"id":"T_new_74","width":"10","sp":"10"},{"id":"K_SPACE","width":"610"},{"id":"T_new_76","width":"10","sp":"10"},{"id":"K_ENTER","text":"*Enter*","width":"140","sp":"1"}]}]},{"id":"numeric","row":[{"id":"1","key":[{"id":"K_1","text":"1"},{"id":"K_2","text":"2"},{"id":"K_3","text":"3"},{"id":"K_4","text":"4"},{"id":"K_5","text":"5"},{"id":"K_6","text":"6"},{"id":"K_7","text":"7"},{"id":"K_8","text":"8"},{"id":"K_9","text":"9"},{"id":"K_0","text":"0"}]},{"id":"2","key":[{"id":"K_1","text":"!","pad":"40","layer":"shift"},{"id":"U_0040","text":"@"},{"id":"U_0023","text":"#"},{"id":"U_0024","text":"$"},{"id":"U_0025","text":"%","sk":[{"id":"U_2030"},{"id":"U_2031"}]},{"id":"K_6","text":"^","layer":"shift"},{"id":"U_0026","text":"&"},{"id":"U_002A","text":"*"},{"id":"U_002D","text":"-"},{"id":"U_002B","text":"+"}]},{"id":"3","key":[{"id":"K_CURRENCIES","text":"*Currency*","width":"100","sp":"1","nextlayer":"currency","sk":[{"text":"*Symbol*","id":"K_SYMBOLS","sp":"1","nextlayer":"symbol"}]},{"id":"U_005B","text":"[","sk":[{"id":"U_007B"},{"id":"U_00AB"},{"id":"U_003C"}]},{"id":"U_0028","text":"("},{"id":"U_0029","text":")"},{"id":"U_005D","text":"]","sk":[{"id":"U_007D"},{"id":"U_00BB"},{"id":"U_003E"}]},{"id":"U_003D","text":"="},{"id":"U_005F","text":"_"},{"id":"U_007C","text":"|"},{"id":"U_005C","text":"\\","sk":[{"text":"/","id":"U_002F"}]},{"id":"K_BKSP","text":"*BkSp*","width":"100","sp":"1"}]},{"id":"4","key":[{"id":"K_LOWER","text":"*abc*","width":"150","sp":"1","nextlayer":"default"},{"id":"K_LOPT","text":"*Menu*","width":"100","sp":"1"},{"id":"T_new_178","width":"10","sp":"10"},{"id":"K_SPACE","width":"610"},{"id":"T_new_180","width":"10","sp":"10"},{"id":"K_ENTER","text":"*Enter*","width":"140","sp":"1"}]}]},{"id":"symbol","row":[{"id":"1","key":[{"id":"U_0060","text":"`"},{"id":"U_007E","text":"~"},{"id":"U_00B0","text":"°"},{"id":"U_00A8","text":"¨"},{"id":"U_00B4","text":"´"},{"id":"U_00B8","text":"¸"},{"id":"U_00AF","text":"¯"},{"id":"U_00BF","text":"¿"},{"id":"U_00A1","text":"¡"},{"id":"U_00AC","text":"¬"}]},{"id":"2","key":[{"id":"U_00AA","text":"ª","pad":"40"},{"id":"U_00BA","text":"º"},{"id":"U_00B6","text":"¶"},{"id":"U_00A7","text":"§"},{"id":"U_2021","text":"‡"},{"id":"U_2020","text":"†"},{"id":"U_00A6","text":"¦"},{"id":"U_2122","text":"™"},{"id":"U_2116","text":"№"},{"id":"T_new_336","sp":"10"}]},{"id":"3","key":[{"id":"K_NUMERALS","text":"*123*","width":"100","sp":"1","nextlayer":"numeric","sk":[{"text":"*Currency*","id":"K_CURRENCIES","sp":"1"}]},{"id":"U_00A9","text":"©"},{"id":"U_2117","text":"℗"},{"id":"U_00AE","text":"®"},{"id":"U_2014","text":"—"},{"id":"U_2013","text":"–"},{"id":"U_2022","text":"•"},{"id":"U_00B7","text":"·"},{"id":"U_2026","text":"…","sk":[{"text":"±","id":"U_00B1"},{"text":"×","id":"U_00D7"},{"text":"÷","id":"U_00F7"},{"text":"µ","id":"U_00B5"}]},{"id":"K_BKSP","text":"*BkSp*","width":"100","sp":"1"}]},{"id":"4","key":[{"id":"K_LOWER","text":"*abc*","width":"150","sp":"1","nextlayer":"default"},{"id":"K_LOPT","text":"*Menu*","width":"100","sp":"1"},{"id":"T_new_350","width":"10","sp":"10"},{"id":"K_SPACE","width":"610"},{"id":"T_new_352","width":"10","sp":"10"},{"id":"K_ENTER","text":"*Enter*","width":"140","sp":"1"}]}]},{"id":"currency","row":[{"id":"1","key":[{"id":"U_00A2","text":"¢","nextlayer":"numeric"},{"id":"U_20AC","text":"€","nextlayer":"numeric"},{"id":"U_20A4","text":"₤","nextlayer":"numeric"},{"id":"U_00A3","text":"£","nextlayer":"numeric"},{"id":"U_20AA","text":"₪","nextlayer":"numeric"},{"id":"U_20A8","text":"₨","nextlayer":"numeric"},{"id":"U_20B9","text":"₹","nextlayer":"numeric"},{"id":"U_20A9","text":"₩","nextlayer":"numeric"},{"id":"U_00A5","text":"¥","nextlayer":"numeric"},{"id":"U_00A4","text":"¤","nextlayer":"numeric"}]},{"id":"2","key":[{"id":"U_20AB","text":"₫","pad":"40","nextlayer":"numeric"},{"id":"U_20AF","text":"₯","nextlayer":"numeric"},{"id":"U_20B1","text":"₱","nextlayer":"numeric"},{"id":"U_20A3","text":"₣","nextlayer":"numeric"},{"id":"U_20B0","text":"₰","nextlayer":"numeric"},{"id":"U_20B2","text":"₲","nextlayer":"numeric"},{"id":"U_20B4","text":"₴","nextlayer":"numeric"},{"id":"U_20A1","text":"₡","nextlayer":"numeric"},{"id":"U_20AD","text":"₭","nextlayer":"numeric"},{"id":"T_new_2717","sp":"10"}]},{"id":"3","key":[{"id":"K_SYMBOLS","text":"*Symbol*","width":"100","sp":"1","nextlayer":"symbol"},{"id":"U_20A6","text":"₦","nextlayer":"numeric"},{"id":"U_20A7","text":"₧","nextlayer":"numeric"},{"id":"U_20AE","text":"₮","nextlayer":"numeric"},{"id":"U_0BF9","text":"௹","nextlayer":"numeric"},{"id":"U_09F3","text":"৳","nextlayer":"numeric"},{"id":"U_0E3F","text":"฿","nextlayer":"numeric"},{"id":"T_new_2725","sp":"10"},{"id":"T_new_2726","sp":"10"},{"id":"K_BKSP","text":"*BkSp*","width":"100","sp":"1"}]},{"id":"4","key":[{"id":"K_LOWER","text":"*abc*","width":"150","sp":"1","nextlayer":"default"},{"id":"K_LOPT","text":"*Menu*","width":"100","sp":"1"},{"id":"T_new_2731","width":"10","sp":"10"},{"id":"K_SPACE","width":"610"},{"id":"T_new_2733","width":"10","sp":"10"},{"id":"K_ENTER","text":"*Enter*","width":"140","sp":"1"}]}]}],"displayUnderlying":false}};this.KVER="18.0.252.0";this.KVS=[];this.gs=function(t,e) {return this.g0(t,e);};this.gs=function(t,e) {return this.g0(t,e);};this.g0=function(t,e) {var k=KeymanWeb,r=0,m=0;if(k.KKM(e,16384,8)) {if(1){r=m=1;k.KDC(0,t);r=this.c0(t,e);m=2;}}else if(k.KKM(e,16384,32)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t," ");r=this.c1(t,e);m=2;}}else if(k.KKM(e,16400,49)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"!");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,222)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"\"");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,51)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"#");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,52)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"$");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,53)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"%");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,55)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"&");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,222)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"'");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,57)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"(");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,48)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,")");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,56)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"*");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,187)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"+");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,188)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,",");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,189)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"-");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,190)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,".");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,191)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"/");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,48)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"0");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,49)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"1");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,50)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"2");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,51)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"3");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,52)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"4");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,53)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"5");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,54)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"6");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,55)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"7");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,56)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"8");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,57)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"9");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,186)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,":");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,186)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,";");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,188)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"<");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,187)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"=");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,190)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,">");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,191)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"?");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,50)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"@");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,65)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"A");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,66)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"B");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,67)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"C");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,68)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"D");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,69)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"E");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,70)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"F");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,71)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"G");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,72)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"H");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,73)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"I");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,74)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"J");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,75)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"K");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,76)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"L");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,77)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"M");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,78)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"N");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,79)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"O");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,80)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"P");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,81)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"Q");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,82)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"R");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,83)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"S");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,84)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"T");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,85)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"U");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,86)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"V");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,87)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"W");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,88)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"X");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,89)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"Y");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,90)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"Z");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,219)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"[");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,220)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"\\");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,221)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"]");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,54)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"^");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,189)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"_");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,192)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"`");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,65)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"a");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,66)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"b");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,67)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"c");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,68)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"d");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,69)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"e");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,70)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"f");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,71)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"g");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,72)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"h");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,73)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"i");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,74)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"j");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,75)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"k");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,76)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"l");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,77)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"m");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,78)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"n");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,79)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"o");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,80)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"p");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,81)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"q");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,82)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"r");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,83)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"s");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,84)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"t");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,85)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"u");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,86)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"v");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,87)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"w");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,88)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"x");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,89)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"y");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16384,90)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"z");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,219)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"{");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,220)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"|");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,221)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"}");r=this.c2(t,e);m=2;}}else if(k.KKM(e,16400,192)) {if(1){r=m=1;k.KDC(0,t);k.KO(-1,t,"~");r=this.c2(t,e);m=2;}}return r;};this.c0=function(t,e){return this.avroBackspace(t);};this.c1=function(t,e){return this.avroCommit(t);};this.c2=function(t,e){return this.avroCompose(t);};/*
+    =============================================================================
+    *****************************************************************************
+    The contents of this file are subject to the Mozilla Public License
+    Version 1.1 (the "License"); you may not use this file except in
+    compliance with the License. You may obtain a copy of the License at
+    http://www.mozilla.org/MPL/
+
+    Software distributed under the License is distributed on an "AS IS"
+    basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+    License for the specific language governing rights and limitations
+    under the License.
+
+    The Original Code is jsAvroPhonetic
+
+    The Initial Developer of the Original Code is
+    Rifat Nabi <to.rifat@gmail.com>
+
+    Copyright (C) OmicronLab (http://www.omicronlab.com). All Rights Reserved.
+
+
+    Contributor(s): ______________________________________.
+
+    *****************************************************************************
+    =============================================================================
+*/
+
+var OmicronLab = {};
+OmicronLab.Avro = {};
+
+OmicronLab.Avro.Phonetic = {
+    parse: function(input) {
+        var fixed = this.fixString(input);
+        var output = "";
+        for(var cur = 0; cur < fixed.length; ++cur) {
+            var start = cur, end = cur + 1, prev = start - 1;
+            var matched = false;
+
+            for(var i = 0; i < this.data.patterns.length; ++i) {
+                var pattern = this.data.patterns[i];
+                end = cur + pattern.find.length;
+                if(end <= fixed.length && fixed.substring(start, end) == pattern.find) {
+                    prev = start - 1;
+                    if(typeof pattern.rules !== 'undefined') {
+                        for(var j = 0; j < pattern.rules.length; ++j) {
+                            var rule = pattern.rules[j];
+                            var replace = true;
+
+                            var chk = 0;
+                            for(var k=0; k < rule.matches.length; ++k) {
+                                var match = rule.matches[k];
+
+                                if(match.type === "suffix") {
+                                    chk = end;
+                                } 
+                                // Prefix
+                                else {
+                                    chk = prev;
+                                }
+
+                                // Handle Negative
+                                if(typeof match.negative === 'undefined') {
+                                    match.negative = false;
+                                    if(match.scope.charAt(0) === '!') {
+                                        match.negative = true;
+                                        match.scope = match.scope.substring(1);
+                                    }
+                                }
+
+                                // Handle empty value
+                                if(typeof match.value === 'undefined') match.value = '';
+
+                                // Beginning
+                                if(match.scope === "punctuation") {
+                                    if(
+                                        ! (
+                                            ((chk < 0) && (match.type === "prefix")) || 
+                                            ((chk >= fixed.length) && (match.type === "suffix")) || 
+                                            this.isPunctuation(fixed.charAt(chk))
+                                        ) ^ match.negative
+                                    ) {
+                                        replace = false;
+                                        break;
+                                    }
+                                }
+                                // Vowel
+                                else if(match.scope === "vowel") {
+                                    if(
+                                        ! (
+                                            (
+                                                (chk >= 0 && (match.type === "prefix")) || 
+                                                (chk < fixed.length && (match.type === "suffix"))
+                                            ) && 
+                                            this.isVowel(fixed.charAt(chk))
+                                        ) ^ match.negative
+                                    ) {
+                                        replace = false;
+                                        break;
+                                    }
+                                }
+                                // Consonant
+                                else if(match.scope === "consonant") {
+                                    if(
+                                        ! (
+                                            (
+                                                (chk >= 0 && (match.type === "prefix")) || 
+                                                (chk < fixed.length && match.type === ("suffix"))
+                                            ) && 
+                                            this.isConsonant(fixed.charAt(chk))
+                                        ) ^ match.negative
+                                    ) {
+                                        replace = false;
+                                        break;
+                                    }
+                                }
+                                // Exact
+                                else if(match.scope === "exact") {
+                                    var s, e;
+                                    if(match.type === "suffix") {
+                                        s = end;
+                                        e = end + match.value.length;
+                                    } 
+                                    // Prefix
+                                    else {
+                                        s = start - match.value.length;
+                                        e = start;
+                                    }
+                                    if(!this.isExact(match.value, fixed, s, e, match.negative)) {
+                                        replace = false;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if(replace) {
+                                output += rule.replace;
+                                cur = end - 1;
+                                matched = true;
+                                break;
+                            }
+
+                        }
+                    }
+                    if(matched == true) break;
+
+                    // Default
+                    output += pattern.replace;
+                    cur = end - 1;
+                    matched = true;
+                    break;
+                }
+            }
+
+            if(!matched) {
+                output += fixed.charAt(cur);
+            }
+        }
+        return output;
+    },
+    fixString: function(input) {
+        var fixed = '';
+        for(var i=0; i < input.length; ++i) {
+            var cChar = input.charAt(i);
+            if(this.isCaseSensitive(cChar)) {
+                fixed += cChar;
+            } else {
+                fixed += cChar.toLowerCase();
+            }
+        }
+        return fixed;
+    },
+    isVowel: function(c) {
+        return (this.data.vowel.indexOf(c.toLowerCase()) >= 0);
+    },
+    isConsonant: function(c) {
+        return (this.data.consonant.indexOf(c.toLowerCase()) >= 0);
+    },
+    isPunctuation: function(c) {
+        return (!(this.isVowel(c) || this.isConsonant(c)));
+    },
+    isExact: function(needle, heystack, start, end, not) {
+        return ((start >= 0 && end < heystack.length && (heystack.substring(start, end)  === needle)) ^ not);
+    },
+    isCaseSensitive: function(c) {
+        return (this.data.casesensitive.indexOf(c.toLowerCase()) >= 0);
+    },
+    data: {
+        "patterns":
+        [
+            {
+                "find":"bhl",
+                "replace":"ভ্ল"
+            },
+            {
+                "find":"psh",
+                "replace":"পশ"
+            },
+            {
+                "find":"bdh",
+                "replace":"ব্ধ"
+            },
+            {
+                "find":"bj",
+                "replace":"ব্জ"
+            },
+            {
+                "find":"bd",
+                "replace":"ব্দ"
+            },
+            {
+                "find":"bb",
+                "replace":"ব্ব"
+            },
+            {
+                "find":"bl",
+                "replace":"ব্ল"
+            },
+            {
+                "find":"bh",
+                "replace":"ভ"
+            },
+            {
+                "find":"vl",
+                "replace":"ভ্ল"
+            },
+            {
+                "find":"b",
+                "replace":"ব"
+            },
+            {
+                "find":"v",
+                "replace":"ভ"
+            },
+            {
+                "find":"cNG",
+                "replace":"চ্ঞ"
+            },
+            {
+                "find":"cch",
+                "replace":"চ্ছ"
+            },
+            {
+                "find":"cc",
+                "replace":"চ্চ"
+            },
+            {
+                "find":"ch",
+                "replace":"ছ"
+            },
+            {
+                "find":"c",
+                "replace":"চ"
+            },
+            {
+                "find":"dhn",
+                "replace":"ধ্ন"
+            },
+            {
+                "find":"dhm",
+                "replace":"ধ্ম"
+            },
+            {
+                "find":"dgh",
+                "replace":"দ্ঘ"
+            },
+            {
+                "find":"ddh",
+                "replace":"দ্ধ"
+            },
+            {
+                "find":"dbh",
+                "replace":"দ্ভ"
+            },
+            {
+                "find":"dv",
+                "replace":"দ্ভ"
+            },
+            {
+                "find":"dm",
+                "replace":"দ্ম"
+            },
+            {
+                "find":"DD",
+                "replace":"ড্ড"
+            },
+            {
+                "find":"Dh",
+                "replace":"ঢ"
+            },
+            {
+                "find":"dh",
+                "replace":"ধ"
+            },
+            {
+                "find":"dg",
+                "replace":"দ্গ"
+            },
+            {
+                "find":"dd",
+                "replace":"দ্দ"
+            },
+            {
+                "find":"D",
+                "replace":"ড"
+            },
+            {
+                "find":"d",
+                "replace":"দ"
+            },
+            {
+                "find":"...",
+                "replace":"..."
+            },
+            {
+                "find":".`",
+                "replace":"."
+            },
+            {
+                "find":"..",
+                "replace":"।।"
+            },
+            {
+                "find":".",
+                "replace":"।"
+            },
+            {
+                "find":"ghn",
+                "replace":"ঘ্ন"
+            },
+            {
+                "find":"Ghn",
+                "replace":"ঘ্ন"
+            },
+            {
+                "find":"gdh",
+                "replace":"গ্ধ"
+            },
+            {
+                "find":"Gdh",
+                "replace":"গ্ধ"
+            },
+            {
+                "find":"gN",
+                "replace":"গ্ণ"
+            },
+            {
+                "find":"GN",
+                "replace":"গ্ণ"
+            },
+            {
+                "find":"gn",
+                "replace":"গ্ন"
+            },
+            {
+                "find":"Gn",
+                "replace":"গ্ন"
+            },
+            {
+                "find":"gm",
+                "replace":"গ্ম"
+            },
+            {
+                "find":"Gm",
+                "replace":"গ্ম"
+            },
+            {
+                "find":"gl",
+                "replace":"গ্ল"
+            },
+            {
+                "find":"Gl",
+                "replace":"গ্ল"
+            },
+            {
+                "find":"gg",
+                "replace":"জ্ঞ"
+            },
+            {
+                "find":"GG",
+                "replace":"জ্ঞ"
+            },
+            {
+                "find":"Gg",
+                "replace":"জ্ঞ"
+            },
+            {
+                "find":"gG",
+                "replace":"জ্ঞ"
+            },
+            {
+                "find":"gh",
+                "replace":"ঘ"
+            },
+            {
+                "find":"Gh",
+                "replace":"ঘ"
+            },
+            {
+                "find":"g",
+                "replace":"গ"
+            },
+            {
+                "find":"G",
+                "replace":"গ"
+            },
+            {
+                "find":"hN",
+                "replace":"হ্ণ"
+            },
+            {
+                "find":"hn",
+                "replace":"হ্ন"
+            },
+            {
+                "find":"hm",
+                "replace":"হ্ম"
+            },
+            {
+                "find":"hl",
+                "replace":"হ্ল"
+            },
+            {
+                "find":"h",
+                "replace":"হ"
+            },
+            {
+                "find":"jjh",
+                "replace":"জ্ঝ"
+            },
+            {
+                "find":"jNG",
+                "replace":"জ্ঞ"
+            },
+            {
+                "find":"jh",
+                "replace":"ঝ"
+            },
+            {
+                "find":"jj",
+                "replace":"জ্জ"
+            },
+            {
+                "find":"j",
+                "replace":"জ"
+            },
+            {
+                "find":"J",
+                "replace":"জ"
+            },
+            {
+                "find":"kkhN",
+                "replace":"ক্ষ্ণ"
+            },
+            {
+                "find":"kShN",
+                "replace":"ক্ষ্ণ"
+            },
+            {
+                "find":"kkhm",
+                "replace":"ক্ষ্ম"
+            },
+            {
+                "find":"kShm",
+                "replace":"ক্ষ্ম"
+            },
+            {
+                "find":"kxN",
+                "replace":"ক্ষ্ণ"
+            },
+            {
+                "find":"kxm",
+                "replace":"ক্ষ্ম"
+            },
+            {
+                "find":"kkh",
+                "replace":"ক্ষ"
+            },
+            {
+                "find":"kSh",
+                "replace":"ক্ষ"
+            },
+            {
+                "find":"ksh",
+                "replace":"কশ"
+            },
+            {
+                "find":"kx",
+                "replace":"ক্ষ"
+            },
+            {
+                "find":"kk",
+                "replace":"ক্ক"
+            },
+            {
+                "find":"kT",
+                "replace":"ক্ট"
+            },
+            {
+                "find":"kt",
+                "replace":"ক্ত"
+            },
+            {
+                "find":"kl",
+                "replace":"ক্ল"
+            },
+            {
+                "find":"ks",
+                "replace":"ক্স"
+            },
+            {
+                "find":"kh",
+                "replace":"খ"
+            },
+            {
+                "find":"k",
+                "replace":"ক"
+            },
+            {
+                "find":"lbh",
+                "replace":"ল্ভ"
+            },
+            {
+                "find":"ldh",
+                "replace":"ল্ধ"
+            },
+            {
+                "find":"lkh",
+                "replace":"লখ"
+            },
+            {
+                "find":"lgh",
+                "replace":"লঘ"
+            },
+            {
+                "find":"lph",
+                "replace":"লফ"
+            },
+            {
+                "find":"lk",
+                "replace":"ল্ক"
+            },
+            {
+                "find":"lg",
+                "replace":"ল্গ"
+            },
+            {
+                "find":"lT",
+                "replace":"ল্ট"
+            },
+            {
+                "find":"lD",
+                "replace":"ল্ড"
+            },
+            {
+                "find":"lp",
+                "replace":"ল্প"
+            },
+            {
+                "find":"lv",
+                "replace":"ল্ভ"
+            },
+            {
+                "find":"lm",
+                "replace":"ল্ম"
+            },
+            {
+                "find":"ll",
+                "replace":"ল্ল"
+            },
+            {
+                "find":"lb",
+                "replace":"ল্ব"
+            },
+            {
+                "find":"l",
+                "replace":"ল"
+            },
+            {
+                "find":"mth",
+                "replace":"ম্থ"
+            },
+            {
+                "find":"mph",
+                "replace":"ম্ফ"
+            },
+            {
+                "find":"mbh",
+                "replace":"ম্ভ"
+            },
+            {
+                "find":"mpl",
+                "replace":"মপ্ল"
+            },
+            {
+                "find":"mn",
+                "replace":"ম্ন"
+            },
+            {
+                "find":"mp",
+                "replace":"ম্প"
+            },
+            {
+                "find":"mv",
+                "replace":"ম্ভ"
+            },
+            {
+                "find":"mm",
+                "replace":"ম্ম"
+            },
+            {
+                "find":"ml",
+                "replace":"ম্ল"
+            },
+            {
+                "find":"mb",
+                "replace":"ম্ব"
+            },
+            {
+                "find":"mf",
+                "replace":"ম্ফ"
+            },
+            {
+                "find":"m",
+                "replace":"ম"
+            },
+            {
+                "find":"0",
+                "replace":"০"
+            },
+            {
+                "find":"1",
+                "replace":"১"
+            },
+            {
+                "find":"2",
+                "replace":"২"
+            },
+            {
+                "find":"3",
+                "replace":"৩"
+            },
+            {
+                "find":"4",
+                "replace":"৪"
+            },
+            {
+                "find":"5",
+                "replace":"৫"
+            },
+            {
+                "find":"6",
+                "replace":"৬"
+            },
+            {
+                "find":"7",
+                "replace":"৭"
+            },
+            {
+                "find":"8",
+                "replace":"৮"
+            },
+            {
+                "find":"9",
+                "replace":"৯"
+            },
+            {
+                "find":"NgkSh",
+                "replace":"ঙ্ক্ষ"
+            },
+            {
+                "find":"Ngkkh",
+                "replace":"ঙ্ক্ষ"
+            },
+            {
+                "find":"NGch",
+                "replace":"ঞ্ছ"
+            },
+            {
+                "find":"Nggh",
+                "replace":"ঙ্ঘ"
+            },
+            {
+                "find":"Ngkh",
+                "replace":"ঙ্খ"
+            },
+            {
+                "find":"NGjh",
+                "replace":"ঞ্ঝ"
+            },
+            {
+                "find":"ngOU",
+                "replace":"ঙ্গৌ"
+            },
+            {
+                "find":"ngOI",
+                "replace":"ঙ্গৈ"
+            },
+            {
+                "find":"Ngkx",
+                "replace":"ঙ্ক্ষ"
+            },
+            {
+                "find":"NGc",
+                "replace":"ঞ্চ"
+            },
+            {
+                "find":"nch",
+                "replace":"ঞ্ছ"
+            },
+            {
+                "find":"njh",
+                "replace":"ঞ্ঝ"
+            },
+            {
+                "find":"ngh",
+                "replace":"ঙ্ঘ"
+            },
+            {
+                "find":"Ngk",
+                "replace":"ঙ্ক"
+            },
+            {
+                "find":"Ngx",
+                "replace":"ঙ্ষ"
+            },
+            {
+                "find":"Ngg",
+                "replace":"ঙ্গ"
+            },
+            {
+                "find":"Ngm",
+                "replace":"ঙ্ম"
+            },
+            {
+                "find":"NGj",
+                "replace":"ঞ্জ"
+            },
+            {
+                "find":"ndh",
+                "replace":"ন্ধ"
+            },
+            {
+                "find":"nTh",
+                "replace":"ন্ঠ"
+            },
+            {
+                "find":"NTh",
+                "replace":"ণ্ঠ"
+            },
+            {
+                "find":"nth",
+                "replace":"ন্থ"
+            },
+            {
+                "find":"nkh",
+                "replace":"ঙ্খ"
+            },
+            {
+                "find":"ngo",
+                "replace":"ঙ্গ"
+            },
+            {
+                "find":"nga",
+                "replace":"ঙ্গা"
+            },
+            {
+                "find":"ngi",
+                "replace":"ঙ্গি"
+            },
+            {
+                "find":"ngI",
+                "replace":"ঙ্গী"
+            },
+            {
+                "find":"ngu",
+                "replace":"ঙ্গু"
+            },
+            {
+                "find":"ngU",
+                "replace":"ঙ্গূ"
+            },
+            {
+                "find":"nge",
+                "replace":"ঙ্গে"
+            },
+            {
+                "find":"ngO",
+                "replace":"ঙ্গো"
+            },
+            {
+                "find":"NDh",
+                "replace":"ণ্ঢ"
+            },
+            {
+                "find":"nsh",
+                "replace":"নশ"
+            },
+            {
+                "find":"Ngr",
+                "replace":"ঙর"
+            },
+            {
+                "find":"NGr",
+                "replace":"ঞর"
+            },
+            {
+                "find":"ngr",
+                "replace":"ংর"
+            },
+            {
+                "find":"nj",
+                "replace":"ঞ্জ"
+            },
+            {
+                "find":"Ng",
+                "replace":"ঙ"
+            },
+            {
+                "find":"NG",
+                "replace":"ঞ"
+            },
+            {
+                "find":"nk",
+                "replace":"ঙ্ক"
+            },
+            {
+                "find":"ng",
+                "replace":"ং"
+            },
+            {
+                "find":"nn",
+                "replace":"ন্ন"
+            },
+            {
+                "find":"NN",
+                "replace":"ণ্ণ"
+            },
+            {
+                "find":"Nn",
+                "replace":"ণ্ন"
+            },
+            {
+                "find":"nm",
+                "replace":"ন্ম"
+            },
+            {
+                "find":"Nm",
+                "replace":"ণ্ম"
+            },
+            {
+                "find":"nd",
+                "replace":"ন্দ"
+            },
+            {
+                "find":"nT",
+                "replace":"ন্ট"
+            },
+            {
+                "find":"NT",
+                "replace":"ণ্ট"
+            },
+            {
+                "find":"nD",
+                "replace":"ন্ড"
+            },
+            {
+                "find":"ND",
+                "replace":"ণ্ড"
+            },
+            {
+                "find":"nt",
+                "replace":"ন্ত"
+            },
+            {
+                "find":"ns",
+                "replace":"ন্স"
+            },
+            {
+                "find":"nc",
+                "replace":"ঞ্চ"
+            },
+            {
+                "find":"n",
+                "replace":"ন"
+            },
+            {
+                "find":"N",
+                "replace":"ণ"
+            },
+            {
+                "find":"OI`",
+                "replace":"ৈ"
+            },
+            {
+                "find":"OU`",
+                "replace":"ৌ"
+            },
+            {
+                "find":"O`",
+                "replace":"ো"
+            },
+            {
+                "find":"OI",
+                "replace":"ৈ",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"!consonant"
+                            }
+                        ],
+                        "replace":"ঐ"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"punctuation"
+                            }
+                        ],
+                        "replace":"ঐ"
+                    }
+                ]
+            },
+            {
+                "find":"OU",
+                "replace":"ৌ",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"!consonant"
+                            }
+                        ],
+                        "replace":"ঔ"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"punctuation"
+                            }
+                        ],
+                        "replace":"ঔ"
+                    }
+                ]
+            },
+            {
+                "find":"O",
+                "replace":"ো",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"!consonant"
+                            }
+                        ],
+                        "replace":"ও"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"punctuation"
+                            }
+                        ],
+                        "replace":"ও"
+                    }
+                ]
+            },
+            {
+                "find":"phl",
+                "replace":"ফ্ল"
+            },
+            {
+                "find":"pT",
+                "replace":"প্ট"
+            },
+            {
+                "find":"pt",
+                "replace":"প্ত"
+            },
+            {
+                "find":"pn",
+                "replace":"প্ন"
+            },
+            {
+                "find":"pp",
+                "replace":"প্প"
+            },
+            {
+                "find":"pl",
+                "replace":"প্ল"
+            },
+            {
+                "find":"ps",
+                "replace":"প্স"
+            },
+            {
+                "find":"ph",
+                "replace":"ফ"
+            },
+            {
+                "find":"fl",
+                "replace":"ফ্ল"
+            },
+            {
+                "find":"f",
+                "replace":"ফ"
+            },
+            {
+                "find":"p",
+                "replace":"প"
+            },
+            {
+                "find":"rri`",
+                "replace":"ৃ"
+            },
+            {
+                "find":"rri",
+                "replace":"ৃ",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"!consonant"
+                            }
+                        ],
+                        "replace":"ঋ"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"punctuation"
+                            }
+                        ],
+                        "replace":"ঋ"
+                    }
+                ]
+            },
+            {
+                "find":"rrZ",
+                "replace":"রর‍্য"
+            },
+            {
+                "find":"rry",
+                "replace":"রর‍্য"
+            },
+            {
+                "find":"rZ",
+                "replace":"র‍্য",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"consonant"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"!exact",
+                                "value":"r"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"!exact",
+                                "value":"y"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"!exact",
+                                "value":"w"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"!exact",
+                                "value":"x"
+                            }
+                        ],
+                        "replace":"্র্য"
+                    }
+                ]
+            },
+            {
+                "find":"ry",
+                "replace":"র‍্য",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"consonant"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"!exact",
+                                "value":"r"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"!exact",
+                                "value":"y"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"!exact",
+                                "value":"w"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"!exact",
+                                "value":"x"
+                            }
+                        ],
+                        "replace":"্র্য"
+                    }
+                ]
+            },
+            {
+                "find":"rr",
+                "replace":"রর",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"!consonant"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!vowel"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"r"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!punctuation"
+                            }
+                        ],
+                        "replace":"র্"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"consonant"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"!exact",
+                                "value":"r"
+                            }
+                        ],
+                        "replace":"্রর"
+                    }
+                ]
+            },
+            {
+                "find":"Rg",
+                "replace":"ড়্গ"
+            },
+            {
+                "find":"Rh",
+                "replace":"ঢ়"
+            },
+            {
+                "find":"R",
+                "replace":"ড়"
+            },
+            {
+                "find":"r",
+                "replace":"র",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"consonant"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"!exact",
+                                "value":"r"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"!exact",
+                                "value":"y"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"!exact",
+                                "value":"w"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"!exact",
+                                "value":"x"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"!exact",
+                                "value":"Z"
+                            }
+                        ],
+                        "replace":"্র"
+                    }
+                ]
+            },
+            {
+                "find":"shch",
+                "replace":"শ্ছ"
+            },
+            {
+                "find":"ShTh",
+                "replace":"ষ্ঠ"
+            },
+            {
+                "find":"Shph",
+                "replace":"ষ্ফ"
+            },
+            {
+                "find":"Sch",
+                "replace":"শ্ছ"
+            },
+            {
+                "find":"skl",
+                "replace":"স্ক্ল"
+            },
+            {
+                "find":"skh",
+                "replace":"স্খ"
+            },
+            {
+                "find":"sth",
+                "replace":"স্থ"
+            },
+            {
+                "find":"sph",
+                "replace":"স্ফ"
+            },
+            {
+                "find":"shc",
+                "replace":"শ্চ"
+            },
+            {
+                "find":"sht",
+                "replace":"শ্ত"
+            },
+            {
+                "find":"shn",
+                "replace":"শ্ন"
+            },
+            {
+                "find":"shm",
+                "replace":"শ্ম"
+            },
+            {
+                "find":"shl",
+                "replace":"শ্ল"
+            },
+            {
+                "find":"Shk",
+                "replace":"ষ্ক"
+            },
+            {
+                "find":"ShT",
+                "replace":"ষ্ট"
+            },
+            {
+                "find":"ShN",
+                "replace":"ষ্ণ"
+            },
+            {
+                "find":"Shp",
+                "replace":"ষ্প"
+            },
+            {
+                "find":"Shf",
+                "replace":"ষ্ফ"
+            },
+            {
+                "find":"Shm",
+                "replace":"ষ্ম"
+            },
+            {
+                "find":"spl",
+                "replace":"স্প্ল"
+            },
+            {
+                "find":"sk",
+                "replace":"স্ক"
+            },
+            {
+                "find":"Sc",
+                "replace":"শ্চ"
+            },
+            {
+                "find":"sT",
+                "replace":"স্ট"
+            },
+            {
+                "find":"st",
+                "replace":"স্ত"
+            },
+            {
+                "find":"sn",
+                "replace":"স্ন"
+            },
+            {
+                "find":"sp",
+                "replace":"স্প"
+            },
+            {
+                "find":"sf",
+                "replace":"স্ফ"
+            },
+            {
+                "find":"sm",
+                "replace":"স্ম"
+            },
+            {
+                "find":"sl",
+                "replace":"স্ল"
+            },
+            {
+                "find":"sh",
+                "replace":"শ"
+            },
+            {
+                "find":"Sc",
+                "replace":"শ্চ"
+            },
+            {
+                "find":"St",
+                "replace":"শ্ত"
+            },
+            {
+                "find":"Sn",
+                "replace":"শ্ন"
+            },
+            {
+                "find":"Sm",
+                "replace":"শ্ম"
+            },
+            {
+                "find":"Sl",
+                "replace":"শ্ল"
+            },
+            {
+                "find":"Sh",
+                "replace":"ষ"
+            },
+            {
+                "find":"s",
+                "replace":"স"
+            },
+            {
+                "find":"S",
+                "replace":"শ"
+            },
+            {
+                "find":"oo`",
+                "replace":"ু"
+            },
+            {
+                "find":"oo",
+                "replace":"ু",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"!consonant"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"`"
+                            }
+                        ],
+                        "replace":"উ"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"punctuation"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"`"
+                            }
+                        ],
+                        "replace":"উ"
+                    }
+                ]
+            },
+            {
+                "find":"o`",
+                "replace":""
+            },
+            {
+                "find":"oZ",
+                "replace":"অ্য"
+            },
+            {
+                "find":"o",
+                "replace":"",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"vowel"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"!exact",
+                                "value":"o"
+                            }
+                        ],
+                        "replace":"ও"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"vowel"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"exact",
+                                "value":"o"
+                            }
+                        ],
+                        "replace":"অ"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"punctuation"
+                            }
+                        ],
+                        "replace":"অ"
+                    }
+                ]
+            },
+            {
+                "find":"tth",
+                "replace":"ত্থ"
+            },
+            {
+                "find":"t``",
+                "replace":"ৎ"
+            },
+            {
+                "find":"TT",
+                "replace":"ট্ট"
+            },
+            {
+                "find":"Tm",
+                "replace":"ট্ম"
+            },
+            {
+                "find":"Th",
+                "replace":"ঠ"
+            },
+            {
+                "find":"tn",
+                "replace":"ত্ন"
+            },
+            {
+                "find":"tm",
+                "replace":"ত্ম"
+            },
+            {
+                "find":"th",
+                "replace":"থ"
+            },
+            {
+                "find":"tt",
+                "replace":"ত্ত"
+            },
+            {
+                "find":"T",
+                "replace":"ট"
+            },
+            {
+                "find":"t",
+                "replace":"ত"
+            },
+            {
+                "find":"aZ",
+                "replace":"অ্যা"
+            },
+            {
+                "find":"AZ",
+                "replace":"অ্যা"
+            },
+            {
+                "find":"a`",
+                "replace":"া"
+            },
+            {
+                "find":"A`",
+                "replace":"া"
+            },
+            {
+                "find":"a",
+                "replace":"া",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"punctuation"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"`"
+                            }
+                        ],
+                        "replace":"আ"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"!consonant"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"!exact",
+                                "value":"a"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"`"
+                            }
+                        ],
+                        "replace":"য়া"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"exact",
+                                "value":"a"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"`"
+                            }
+                        ],
+                        "replace":"আ"
+                    }
+                ]
+            },
+            {
+                "find":"i`",
+                "replace":"ি"
+            },
+            {
+                "find":"i",
+                "replace":"ি",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"!consonant"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"`"
+                            }
+                        ],
+                        "replace":"ই"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"punctuation"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"`"
+                            }
+                        ],
+                        "replace":"ই"
+                    }
+                ]
+            },
+            {
+                "find":"I`",
+                "replace":"ী"
+            },
+            {
+                "find":"I",
+                "replace":"ী",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"!consonant"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"`"
+                            }
+                        ],
+                        "replace":"ঈ"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"punctuation"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"`"
+                            }
+                        ],
+                        "replace":"ঈ"
+                    }
+                ]
+            },
+            {
+                "find":"u`",
+                "replace":"ু"
+            },
+            {
+                "find":"u",
+                "replace":"ু",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"!consonant"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"`"
+                            }
+                        ],
+                        "replace":"উ"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"punctuation"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"`"
+                            }
+                        ],
+                        "replace":"উ"
+                    }
+                ]
+            },
+            {
+                "find":"U`",
+                "replace":"ূ"
+            },
+            {
+                "find":"U",
+                "replace":"ূ",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"!consonant"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"`"
+                            }
+                        ],
+                        "replace":"ঊ"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"punctuation"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"`"
+                            }
+                        ],
+                        "replace":"ঊ"
+                    }
+                ]
+            },
+            {
+                "find":"ee`",
+                "replace":"ী"
+            },
+            {
+                "find":"ee",
+                "replace":"ী",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"!consonant"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"`"
+                            }
+                        ],
+                        "replace":"ঈ"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"punctuation"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"`"
+                            }
+                        ],
+                        "replace":"ঈ"
+                    }
+                ]
+            },
+            {
+                "find":"e`",
+                "replace":"ে"
+            },
+            {
+                "find":"e",
+                "replace":"ে",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"!consonant"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"`"
+                            }
+                        ],
+                        "replace":"এ"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"punctuation"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"!exact",
+                                "value":"`"
+                            }
+                        ],
+                        "replace":"এ"
+                    }
+                ]
+            },
+            {
+                "find":"z",
+                "replace":"য"
+            },
+            {
+                "find":"Z",
+                "replace":"্য"
+            },
+            {
+                "find":"y",
+                "replace":"্য",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"!consonant"
+                            },
+                            {
+                                "type":"prefix",
+                                "scope":"!punctuation"
+                            }
+                        ],
+                        "replace":"য়"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"punctuation"
+                            }
+                        ],
+                        "replace":"ইয়"
+                    }
+                ]
+            },
+            {
+                "find":"Y",
+                "replace":"য়"
+            },
+            {
+                "find":"q",
+                "replace":"ক"
+            },
+            {
+                "find":"w",
+                "replace":"ও",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"punctuation"
+                            },
+                            {
+                                "type":"suffix",
+                                "scope":"vowel"
+                            }
+                        ],
+                        "replace":"ওয়"
+                    },
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"consonant"
+                            }
+                        ],
+                        "replace":"্ব"
+                    }
+                ]
+            },
+            {
+                "find":"x",
+                "replace":"ক্স",
+                "rules":
+                [
+                    {
+                        "matches":
+                        [
+                            {
+                                "type":"prefix",
+                                "scope":"punctuation"
+                            }
+                        ],
+                        "replace":"এক্স"
+                    }
+                ]
+            },
+            {
+                "find":":`",
+                "replace":":"
+            },
+            {
+                "find":":",
+                "replace":"ঃ"
+            },
+            {
+                "find":"^`",
+                "replace":"^"
+            },
+            {
+                "find":"^",
+                "replace":"ঁ"
+            },
+            {
+                "find":",,",
+                "replace":"্‌"
+            },
+            {
+                "find":",",
+                "replace":","
+            },
+            {
+                "find":"$",
+                "replace":"৳"
+            },
+            {
+                "find":"`",
+                "replace":""
+            }
+        ],
+        "vowel":"aeiou",
+        "consonant":"bcdfghjklmnpqrstvwxyz",
+        "casesensitive":"oiudgjnrstyz"
+    }
+};
+
+/*
+ * Keyman adapter for jsAvroPhonetic.
+ *
+ * Keyman owns the keyboard UI and target-app connection. This adapter only
+ * keeps the active Roman token and replaces its live Bangla rendering. All
+ * transliteration decisions remain in the upstream parser above.
+ */
+this.avroState = { roman: "", rendered: "" };
+
+this.avroReset = function() {
+    this.avroState.roman = "";
+    this.avroState.rendered = "";
+};
+
+this.avroCompose = function(target) {
+    var keymanApi = KeymanWeb;
+    var typed = keymanApi.KC(1, 1, target);
+    var previous = this.avroState.rendered;
+
+    if (!typed) {
+        this.avroReset();
+        return true;
+    }
+
+    // Cursor movement or a host-side edit invalidates the in-memory token.
+    // In that case, begin a fresh token with the character just emitted.
+    if (previous) {
+        var nearby = keymanApi.KC(previous.length + typed.length,
+                                  previous.length + typed.length,
+                                  target);
+        if (nearby.slice(0, nearby.length - typed.length) !== previous) {
+            this.avroReset();
+            previous = "";
+        }
+    }
+
+    this.avroState.roman += typed;
+    var rendered = OmicronLab.Avro.Phonetic.parse(this.avroState.roman);
+    keymanApi.KO(previous.length + typed.length, target, rendered);
+    this.avroState.rendered = rendered;
+    return true;
+};
+
+this.avroCommit = function() {
+    this.avroReset();
+    return true;
+};
+
+this.avroBackspace = function(target) {
+    var keymanApi = KeymanWeb;
+    var previous = this.avroState.rendered;
+
+    if (!this.avroState.roman || !previous) {
+        this.avroReset();
+        keymanApi.KO(1, target, "");
+        return true;
+    }
+
+    // A symbol layer, cursor move, or host edit can change the text without
+    // passing through the Avro rules. Fall back to a normal one-character
+    // deletion instead of removing a stale composition span.
+    if (keymanApi.KC(previous.length, previous.length, target) !== previous) {
+        this.avroReset();
+        keymanApi.KO(1, target, "");
+        return true;
+    }
+
+    this.avroState.roman = this.avroState.roman.slice(0, -1);
+    var rendered = OmicronLab.Avro.Phonetic.parse(this.avroState.roman);
+    keymanApi.KO(previous.length, target, rendered);
+    this.avroState.rendered = rendered;
+    return true;
+};
+
+// Keyman calls KNS when focus changes. Never carry a token into a new field.
+this.KNS = function(code, target, down) {
+    if (code === 0 && !down) {
+        this.avroReset();
+    }
+    return true;
+};
+}

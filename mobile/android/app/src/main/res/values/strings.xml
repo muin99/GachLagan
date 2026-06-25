@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Gachlagan Keyboard</string>
+    <string name="ime_name">Gachlagan — বাংলা অভ্র</string>
+    <string name="description">Type Bangla anywhere with offline Avro Phonetic. First enable Gachlagan Keyboard, then select it as your input method.</string>
+    <string name="open_settings">1. Enable keyboard</string>
+    <string name="open_picker">2. Select keyboard</string>
+    <string name="action_settings">Settings</string>
+</resources>
