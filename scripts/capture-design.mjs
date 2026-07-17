@@ -1,0 +1,13 @@
+import { chromium } from '@playwright/test';
+import { mkdir } from 'node:fs/promises';
+await mkdir('artifacts', { recursive: true });
+const browser = await chromium.launch(); const page = await browser.newPage({ viewport: { width: 1400, height: 1200 }, deviceScaleFactor: 1 });
+await page.goto('http://127.0.0.1:4173'); await page.locator('#demo').click();
+const sender = page.frameLocator('#sender'); await sender.locator('#encrypt').click(); await page.locator('#sender-host').filter({ hasText: '' }).waitFor();
+await page.waitForFunction(() => document.querySelector('#sender-host').value.startsWith('GK1.'));
+await page.locator('#send').click(); await page.getByRole('button', { name: 'Copy message for receiver' }).click();
+await page.frameLocator('#receiver').getByText('Just between you.').waitFor();
+await sender.locator('#draft').fill('I’ll save you a seat. 🌱');
+await page.screenshot({ path: 'artifacts/design-desktop.png', fullPage: true });
+await page.setViewportSize({ width: 390, height: 844 }); await page.screenshot({ path: 'artifacts/design-mobile.png', fullPage: true });
+await browser.close(); console.log('Saved desktop and mobile designs to artifacts/.');

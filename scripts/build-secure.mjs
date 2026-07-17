@@ -1,0 +1,11 @@
+import { build } from 'esbuild';
+import { mkdir, copyFile, cp } from 'node:fs/promises';
+const out = 'dist/secure';
+await mkdir(out, { recursive: true });
+await build({ entryPoints: ['secure/app.mjs'], outfile: `${out}/app.js`, bundle: true, format: 'iife', target: ['safari16', 'chrome100'], sourcemap: false, legalComments: 'inline' });
+for (const file of ['index.html', 'keyboard.css']) await copyFile(`secure/${file}`, `${out}/${file}`);
+await copyFile('third_party/jsAvroPhonetic/avro-lib.js', `${out}/avro.js`);
+for (const target of ['mobile/android/app/src/main/assets/secure', 'mobile/ios/SWKeyboard/secure']) await cp(out, target, { recursive: true });
+await mkdir('dist/preview', { recursive: true });
+for (const file of ['index.html', 'preview.css', 'preview.js']) await copyFile(`design/${file}`, `dist/preview/${file}`);
+console.log('Offline private keyboard built and synced to Android, iOS, and design preview.');
