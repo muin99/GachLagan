@@ -15,7 +15,7 @@ export function unb64(text) {
   return bytes;
 }
 export function checkText(text) {
-  if (typeof text !== 'string' || !text.length || utf8.encode(text).length > MAX_BYTES || !text.isWellFormed()) throw new Error('Write a message of 1–4,096 UTF-8 bytes.');
+  if (typeof text !== 'string' || !text.length || utf8.encode(text).length > MAX_BYTES || decoder.decode(utf8.encode(text)) !== text) throw new Error('Write a message of 1–4,096 UTF-8 bytes.');
 }
 export function checkSecret(secret) {
   if (typeof secret !== 'string') throw new Error('Set a shared key first.');
@@ -23,7 +23,7 @@ export function checkSecret(secret) {
     if (secret.length !== 50 || unb64(secret.slice(7)).length !== 32) throw new Error('That shared key is incomplete.');
     return 'K';
   }
-  if (!secret.isWellFormed() || [...secret.normalize('NFC')].length < 16 || utf8.encode(secret.normalize('NFC')).length > 256) {
+  if (decoder.decode(utf8.encode(secret)) !== secret || [...secret.normalize('NFC')].length < 16 || utf8.encode(secret.normalize('NFC')).length > 256) {
     throw new Error('Use a long shared passphrase: 16+ characters, at most 256 UTF-8 bytes.');
   }
   return 'P';

@@ -35,7 +35,7 @@ enum MessageCrypto {
       return HKDF<SHA256>.deriveKey(inputKeyMaterial: SymmetricKey(data: try unb64(String(secret.dropFirst(7)))), salt: salt, info: Data("Gachlagan/GK1/A256GCM".utf8), outputByteCount: 32)
     }
     var password = Array(secret.precomposedStringWithCanonicalMapping.utf8), key = [UInt8](repeating: 0, count: 32)
-    defer { password.withUnsafeMutableBytes { $0.initializeMemory(as: UInt8.self, repeating: 0) }; key.withUnsafeMutableBytes { $0.initializeMemory(as: UInt8.self, repeating: 0) } }
+    defer { _ = password.withUnsafeMutableBytes { $0.initializeMemory(as: UInt8.self, repeating: 0) }; _ = key.withUnsafeMutableBytes { $0.initializeMemory(as: UInt8.self, repeating: 0) } }
     let count = password.count
     let status = password.withUnsafeBytes { pass in salt.withUnsafeBytes { saltBytes in
       CCKeyDerivationPBKDF(CCPBKDFAlgorithm(kCCPBKDF2), pass.baseAddress!.assumingMemoryBound(to: Int8.self), count, saltBytes.baseAddress!.assumingMemoryBound(to: UInt8.self), salt.count, CCPseudoRandomAlgorithm(kCCPRFHmacAlgSHA256), 600000, &key, 32)

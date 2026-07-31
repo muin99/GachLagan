@@ -17,7 +17,7 @@
         android:theme="@style/AppTheme" >
 
         <service
-            android:name=".SystemKeyboard"
+            android:name=".SecureKeyboardService"
             android:exported="true"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:permission="android.permission.BIND_INPUT_METHOD" >

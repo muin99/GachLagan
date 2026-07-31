@@ -3,6 +3,11 @@ plugins {
 }
 
 android {
+    buildFeatures { buildConfig = true }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
     compileSdk 36
     namespace="com.gachlagan.keyboard"
 
@@ -13,7 +18,7 @@ android {
 
     defaultConfig {
         applicationId "com.gachlagan.keyboard"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 36
         versionCode 1
         versionName "1.0"

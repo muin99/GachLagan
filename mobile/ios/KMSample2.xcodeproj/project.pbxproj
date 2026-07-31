@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA0000000000000000000001 /* MessageCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000011; };
+		AA0000000000000000000002 /* KeyVault.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000012; };
+		AA0000000000000000000003 /* secure in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000013; };
 		290FB45E2AFB270D00249D58 /* ZIPFoundation.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 290FB45D2AFB270D00249D58 /* ZIPFoundation.xcframework */; };
 		290FB45F2AFB270D00249D58 /* ZIPFoundation.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 290FB45D2AFB270D00249D58 /* ZIPFoundation.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		290FB4602AFB271C00249D58 /* ZIPFoundation.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 290FB45D2AFB270D00249D58 /* ZIPFoundation.xcframework */; };
@@ -84,6 +87,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AA0000000000000000000011 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCrypto.swift; sourceTree = "<group>"; };
+		AA0000000000000000000012 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyVault.swift; sourceTree = "<group>"; };
+		AA0000000000000000000013 = {isa = PBXFileReference; lastKnownFileType = folder; path = secure; sourceTree = "<group>"; };
 		290FB45D2AFB270D00249D58 /* ZIPFoundation.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = ZIPFoundation.xcframework; path = ../../Carthage/Build/ZIPFoundation.xcframework; sourceTree = "<group>"; };
 		98ABFD371AD3A047005534F0 /* KMSample2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KMSample2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		98ABFD3B1AD3A047005534F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -199,6 +205,9 @@
 			children = (
 				98ABFDA41AD3A363005534F0 /* SWKeyboard.entitlements */,
 				C045148C1F85E33300D88416 /* KeyboardViewController.swift */,
+				AA0000000000000000000011 /* MessageCrypto.swift */,
+				AA0000000000000000000012 /* KeyVault.swift */,
+				AA0000000000000000000013 /* secure */,
 				98ABFD8E1AD3A232005534F0 /* Supporting Files */,
 			);
 			path = SWKeyboard;
@@ -320,6 +329,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA0000000000000000000003 /* secure in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,6 +379,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C045148D1F85E33300D88416 /* KeyboardViewController.swift in Sources */,
+				AA0000000000000000000001 /* MessageCrypto.swift in Sources */,
+				AA0000000000000000000002 /* KeyVault.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
