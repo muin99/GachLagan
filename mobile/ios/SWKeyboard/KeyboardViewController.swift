@@ -40,15 +40,17 @@ final class KeyboardViewController: UIInputViewController, WKScriptMessageHandle
     resourceDirectory = url.deletingLastPathComponent(); web.loadFileURL(url, allowingReadAccessTo: resourceDirectory)
     NotificationCenter.default.addObserver(self, selector: #selector(clipboardChanged), name: UIPasteboard.changedNotification, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(protectScreen), name: UIApplication.willResignActiveNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(restoreScreen), name: UIApplication.didBecomeActiveNotification, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(captureChanged), name: UIScreen.capturedDidChangeNotification, object: nil)
   }
-  override func viewDidAppear(_ animated: Bool) { super.viewDidAppear(animated); visible = true; web.isHidden = false; clipboardChanged() }
+  override func viewDidAppear(_ animated: Bool) { super.viewDidAppear(animated); restoreScreen() }
   override func viewWillDisappear(_ animated: Bool) { protectScreen(); super.viewWillDisappear(animated) }
   @objc private func protectScreen() {
     visible = false; generation += 1; web?.isHidden = true
     web?.evaluateJavaScript("window.gachlaganLock&&window.gachlaganLock()", completionHandler: nil)
   }
-  @objc private func captureChanged() { if UIScreen.main.isCaptured { protectScreen() } }
+  @objc private func restoreScreen() { guard view.window != nil, !UIScreen.main.isCaptured else { return }; visible = true; web.isHidden = false; clipboardChanged() }
+  @objc private func captureChanged() { if UIScreen.main.isCaptured { protectScreen() } else { restoreScreen() } }
   @objc private func clipboardChanged() {
     guard visible, autoRead, hasFullAccess else { return }
     guard let value = UIPasteboard.general.string, value.utf8.count <= 40000, value.hasPrefix("GK1.") || value.hasPrefix("GE1.") else { return }
@@ -105,7 +107,14 @@ final class KeyboardViewController: UIInputViewController, WKScriptMessageHandle
         guard hasFullAccess else { throw MessageCrypto.Failure("Allow Full Access in keyboard settings to read copied messages. No network connection is used.") }
         let value = UIPasteboard.general.string ?? ""
         guard value.utf8.count <= 40000 else { throw MessageCrypto.Failure("Clipboard message is too large.") }; result = value
-      case "autoRead": autoRead = body["enabled"] as? Bool ?? false
+      case "autoRead":
+        let method = body["method"] as? String ?? "secure"
+        guard ["secure", "binary", "hex", "octal", "base64", "morse"].contains(method) else { throw MessageCrypto.Failure("Unknown mode.") }
+        autoRead = body["enabled"] as? Bool ?? false
+        UserDefaults.standard.set(method, forKey: "messageMode"); UserDefaults.standard.set(autoRead, forKey: "autoRead")
+      case "loadSettings":
+        autoRead = UserDefaults.standard.bool(forKey: "autoRead")
+        result = ["method": UserDefaults.standard.string(forKey: "messageMode") ?? "secure", "autoRead": autoRead]
       case "lock": generation += 1; session = generation
       case "next": advanceToNextInputMode()
       default: throw MessageCrypto.Failure("Unknown keyboard action.")

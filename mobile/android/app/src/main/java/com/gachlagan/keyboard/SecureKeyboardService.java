@@ -153,7 +153,17 @@ public final class SecureKeyboardService extends InputMethodService {
         }
         case "backspace": { InputConnection connection = getCurrentInputConnection(); if (connection != null) connection.deleteSurroundingTextInCodePoints(1, 0); break; }
         case "clipboard": result = copied(); break;
-        case "autoRead": autoRead = message.getBoolean("enabled"); break;
+        case "autoRead": {
+          String method = message.optString("method", "secure");
+          if (!java.util.Arrays.asList("secure", "binary", "hex", "octal", "base64", "morse").contains(method)) throw new IllegalArgumentException("Unknown mode.");
+          autoRead = message.getBoolean("enabled");
+          getSharedPreferences("settings", MODE_PRIVATE).edit().putString("method", method).putBoolean("autoRead", autoRead).apply(); break;
+        }
+        case "loadSettings": {
+          android.content.SharedPreferences saved = getSharedPreferences("settings", MODE_PRIVATE);
+          autoRead = saved.getBoolean("autoRead", false);
+          result = new JSONObject().put("method", saved.getString("method", "secure")).put("autoRead", autoRead); break;
+        }
         case "lock": generation++; session = generation; break;
         case "next": ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).showInputMethodPicker(); break;
         default: throw new IllegalArgumentException("Unknown keyboard action.");

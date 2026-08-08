@@ -208,6 +208,7 @@
     busy = value;
     $("encrypt").disabled = value;
     $("read-clipboard").disabled = value;
+    $("draft").readOnly = value;
   }
   async function insert() {
     if (busy || plainMode) return;
@@ -440,6 +441,10 @@
   };
   $("plain-mode").onclick = () => {
     if (busy) return;
+    if (!plainMode && rawDraft) {
+      status("Encrypt your draft or use Lock to clear it before switching to normal typing.", true);
+      return;
+    }
     plainMode = !plainMode;
     rawDraft = "";
     renderDraft();
@@ -452,33 +457,40 @@
     $("method-help").textContent = secure ? "Authenticated encryption. Both people need the same key." : $("method").value === "morse" ? "Not private. English letters are decoded in UPPERCASE. Bangla is not supported by Morse." : "Not private. Anyone can decode this, without a key.";
   };
   $("generate").onclick = async () => {
+    const current = epoch;
     try {
-      $("shared-key").value = await request("generate");
+      const value = await request("generate");
+      if (current !== epoch) return;
+      $("shared-key").value = value;
       status("New random key generated. Show it to your friend in person.");
     } catch (e) {
-      status(e.message, true);
+      if (current === epoch) status(e.message, true);
     }
   };
   $("show-key").onchange = () => {
     $("shared-key").type = $("show-key").checked ? "text" : "password";
   };
   $("paste-key").onclick = async () => {
+    const current = epoch;
     try {
       const value = await request("clipboard");
+      if (current !== epoch) return;
       checkSecret(value);
       $("shared-key").value = value;
     } catch (e) {
-      status(e.message, true);
+      if (current === epoch) status(e.message, true);
     }
   };
   $("restore-key").onclick = async () => {
+    const current = epoch;
     try {
       const value = await request("loadKey");
+      if (current !== epoch) return;
       if (!value) throw new Error("No key saved on this device.");
       $("shared-key").value = value;
       status("Saved key loaded. Tap Use these settings to unlock.");
     } catch (e) {
-      status(e.message, true);
+      if (current === epoch) status(e.message, true);
     }
   };
   $("forget-key").onclick = async () => {
@@ -491,15 +503,18 @@
     }
   };
   $("save-settings").onclick = async () => {
+    let current = epoch;
     try {
       const nextMethod = $("method").value, value = $("shared-key").value;
       if (nextMethod === "secure") checkSecret(value);
       if ($("remember").checked && nextMethod === "secure") await request("saveKey", { secret: value });
-      ++epoch;
+      if (current !== epoch) return;
+      current = ++epoch;
       method = nextMethod;
       secret = value;
       autoRead = $("auto-read").checked;
-      await request("autoRead", { enabled: autoRead });
+      await request("autoRead", { enabled: autoRead, method });
+      if (current !== epoch) return;
       $("shared-key").value = "";
       $("show-key").checked = false;
       $("shared-key").type = "password";
@@ -510,7 +525,7 @@
       status(method === "secure" ? "Key ready. Type privately, then encrypt." : "Encoding selected. This mode does not protect secrets.");
       if (pendingWire) await read(pendingWire);
     } catch (error) {
-      status(error.message, true);
+      if (current === epoch) status(error.message, true);
     }
   };
   $("read-clipboard").onclick = async () => {
@@ -545,4 +560,13 @@
   keys();
   updateMode();
   touch();
+  if (native) request("loadSettings").then((settings) => {
+    if (!settings || !["secure", "binary", "hex", "octal", "base64", "morse"].includes(settings.method)) return;
+    method = settings.method;
+    autoRead = Boolean(settings.autoRead);
+    $("method").value = method;
+    $("auto-read").checked = autoRead;
+    $("method").onchange();
+    updateMode();
+  }).catch(() => status("Settings unavailable. Private mode remains selected."));
 })();
