@@ -11,6 +11,9 @@
     "build:secure": "node scripts/build-secure.mjs",
     "preview": "npm run build:secure && node scripts/preview.mjs",
     "test:e2e": "playwright test",
+    "test:interop": "node scripts/test-interop.mjs",
+    "test:android": "node scripts/test-android.mjs",
+    "capture:design": "node scripts/capture-design.mjs",
     "verify": "npm run test && npm run build:keyboard && npm run sync:keyboard && npm run build:secure"
   },
   "devDependencies": {
