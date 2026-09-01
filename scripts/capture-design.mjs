@@ -8,6 +8,6 @@ await page.waitForFunction(() => document.querySelector('#sender-host').value.st
 await page.locator('#send').click(); await page.getByRole('button', { name: 'Copy message for receiver' }).click();
 await page.frameLocator('#receiver').getByText('Just between you.').waitFor();
 await sender.locator('#draft').fill('I’ll save you a seat. 🌱');
-await page.screenshot({ path: 'artifacts/design-desktop.png', fullPage: true });
-await page.setViewportSize({ width: 390, height: 844 }); await page.screenshot({ path: 'artifacts/design-mobile.png', fullPage: true });
-await browser.close(); console.log('Saved desktop and mobile designs to artifacts/.');
+await page.screenshot({ path: 'design/preview-desktop.png', fullPage: true });
+await page.setViewportSize({ width: 390, height: 844 }); await page.screenshot({ path: 'design/preview-mobile.png', fullPage: true });
+await browser.close(); console.log('Saved desktop and mobile designs to design/.');

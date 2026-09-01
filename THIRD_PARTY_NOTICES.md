@@ -1,10 +1,10 @@
 # Third-party software
 
-This starter intentionally assembles established open-source projects instead
-of introducing a new keyboard engine.
+The project began from established open-source keyboard projects. The private
+keyboard bundles the original Avro parser and uses platform cryptography.
 
-- **Keyman Engine 18.0.252** — system keyboard runtime and UI for Android and
-  iOS. Copyright SIL Global, licensed under the MIT License. Source:
+- **Keyman Engine 18.0.252** — original baseline runtime, retained in the
+  repository but excluded from the active private-keyboard build. Copyright SIL Global, licensed under the MIT License. Source:
   <https://github.com/keymanapp/keyman>
 - **Keyman US Basic touch layout** — the QWERTY touch-layout foundation.
   Copyright 2008–2020 SIL International, licensed under the MIT License. Its
@@ -15,3 +15,14 @@ of introducing a new keyboard engine.
 
 The small adapter appended to `keyboard/source/avro-engine.js` is kept in that
 MPL-covered file so the original file-level license remains straightforward.
+
+The private UI copies `third_party/jsAvroPhonetic/avro-lib.js` unmodified to each
+bundle as `avro.js`, including its original MPL header. Changes to the Avro
+parser must retain its file-level license and source availability.
+
+Android UI dependencies are AndroidX AppCompat, ConstraintLayout, and WebKit
+(Apache-2.0), with Kotlin standard-library dependencies (Apache-2.0). The iOS
+runtime uses Apple system frameworks. Web Crypto, JCA, CryptoKit, and
+CommonCrypto implement the cryptographic primitives; no external crypto
+service is called. Development tools (Keyman compiler, esbuild, Playwright,
+axe-core) are pinned in package-lock.json and are not shipped as runtime tools.
