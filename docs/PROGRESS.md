@@ -17,8 +17,8 @@ Branch: `feature/offline-encrypted-keyboard`. Baseline: `fca525a` on `main`.
 | `npm run test:interop` | 54 checks passed | Web Crypto, Java JCA, Apple CryptoKit/CommonCrypto on macOS; generated keys, passphrases, Unicode normalization, tamper rejection |
 | `npm run test:e2e` | 7 browser E2E tests passed | Visible draft, ciphertext-only host, copy/decrypt/reply, wrong key, XSS-as-text, Avro/backspace, locking, in-flight cancellation, offline operation, no web storage, accessibility at 320px |
 | Android `assembleDebug assembleRelease` | Passed | Installable debug APK and unsigned release APK |
-| Android `lintDebug` | Passed, 0 errors / 7 warnings | Remaining warnings concern newer dependency versions, intentional bundled JavaScript, and debug-only untranslated test labels |
-| `npm run test:android` | Passed on API 35 emulator | Actual IME/editor connection, visible plaintext in keyboard only, native encryption/insertion, actual clipboard auto-decryption, full reader, Keystore save/restore/delete, hide-to-lock |
+| Android `lintDebug` | Passed, 0 errors / 8 warnings | Remaining warnings concern newer dependency versions, intentional bundled JavaScript, and debug-only untranslated test labels |
+| `npm run test:android` | Passed on API 35 emulator | Actual IME/editor connection, visible plaintext in keyboard only, native encryption/insertion, actual clipboard auto-decryption, full reader, Keystore save/restore/delete, native Unicode passphrase → Web Crypto interoperability, hide-to-lock |
 | Release manifest inspection | Passed | No INTERNET, no debug host, no debuggable flag; backups disabled and explicit transfer exclusions |
 | Swift parser and Xcode project plist checks | Passed | Syntax/project structure only, not iOS compilation |
 | Visual review | Desktop and mobile captured | `design/preview-desktop.png`, `design/preview-mobile.png` |
@@ -40,6 +40,9 @@ crypto test runs on macOS, not inside an iOS keyboard extension.
 - Async results cannot restore keys or insert a message after session locking.
 - A public demo key exists only in the design/test harnesses, not as a native
   keyboard default. Native encryption requires user setup.
+- CI definitions for shared tests, Android builds, and Apple interop/iOS
+  compilation are checked in. They have **not** run on a remote CI service;
+  adding a workflow is not evidence that its iOS build passes.
 
 ## Release status
 

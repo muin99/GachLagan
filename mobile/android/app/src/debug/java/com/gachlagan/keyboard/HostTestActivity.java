@@ -15,6 +15,7 @@ public final class HostTestActivity extends Activity {
     TextView title = new TextView(this); title.setText("Keyboard test host · DEBUG ONLY"); root.addView(title);
     EditText editor = new EditText(this); editor.setContentDescription("Host message"); editor.setHint("Only ciphertext should appear here"); editor.setTextSize(12); editor.setMaxLines(3); root.addView(editor);
     Button copy = new Button(this); copy.setText("Copy received message"); copy.setOnClickListener(v -> ((ClipboardManager)getSystemService(CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("Encrypted message", editor.getText().toString()))); root.addView(copy);
+    Button clear = new Button(this); clear.setText("Clear host message"); clear.setOnClickListener(v -> editor.setText("")); root.addView(clear);
     setContentView(root); editor.requestFocus();
   }
 }
