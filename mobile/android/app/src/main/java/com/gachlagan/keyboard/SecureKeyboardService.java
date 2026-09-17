@@ -35,19 +35,20 @@ public final class SecureKeyboardService extends InputMethodService {
   private WebView web;
   private ClipboardManager clipboard;
   private KeyVault vault;
-  private boolean visible, autoRead, sensitiveField;
+  private boolean visible, autoRead = true, sensitiveField;
   private int generation;
   private final ClipboardManager.OnPrimaryClipChangedListener listener = this::readAutomatically;
 
   @Override public void onCreate() {
     super.onCreate(); vault = new KeyVault(this);
+    autoRead = getSharedPreferences("settings", MODE_PRIVATE).getBoolean("autoRead", true);
     clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
     clipboard.addPrimaryClipChangedListener(listener);
   }
   @Override public View onCreateInputView() {
     if (web != null) { web.removeJavascriptInterface("GachlaganNative"); web.destroy(); }
     web = new WebView(this); web.setBackgroundColor(Color.rgb(23, 27, 39));
-    web.setLayoutParams(new android.widget.LinearLayout.LayoutParams(-1, Math.round(490 * getResources().getDisplayMetrics().density)));
+    web.setLayoutParams(new android.widget.LinearLayout.LayoutParams(-1, Math.round(420 * getResources().getDisplayMetrics().density)));
     web.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
     WebSettings settings = web.getSettings(); settings.setJavaScriptEnabled(true); settings.setDomStorageEnabled(false);
     settings.setAllowFileAccess(false); settings.setAllowContentAccess(false); settings.setBlockNetworkLoads(true);
@@ -161,7 +162,7 @@ public final class SecureKeyboardService extends InputMethodService {
         }
         case "loadSettings": {
           android.content.SharedPreferences saved = getSharedPreferences("settings", MODE_PRIVATE);
-          autoRead = saved.getBoolean("autoRead", false);
+          autoRead = saved.getBoolean("autoRead", true);
           result = new JSONObject().put("method", saved.getString("method", "secure")).put("autoRead", autoRead); break;
         }
         case "lock": generation++; session = generation; break;
@@ -169,7 +170,7 @@ public final class SecureKeyboardService extends InputMethodService {
         default: throw new IllegalArgumentException("Unknown keyboard action.");
       }
       respond(id, result, null, session);
-      if (op.equals("autoRead")) main.post(this::readAutomatically);
+      if (op.equals("autoRead") || op.equals("loadSettings")) main.post(this::readAutomatically);
     } catch (Exception e) { respond(id, null, e instanceof IllegalArgumentException ? e.getMessage() : "Keyboard action unavailable.", session); }
   }
   @Override public void onDestroy() {

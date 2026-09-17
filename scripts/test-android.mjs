@@ -9,9 +9,13 @@ const pkg = 'com.gachlagan.keyboard', ime = pkg + '/.SecureKeyboardService';
 const previousIme = (await device.shell('settings get secure default_input_method')).toString().trim();
 const previousHardware = (await device.shell('settings get secure show_ime_with_hard_keyboard')).toString().trim();
 async function hostNode(label) {
-  await device.shell('uiautomator dump /sdcard/gachlagan-test-ui.xml');
-  const xml = (await device.shell('cat /sdcard/gachlagan-test-ui.xml')).toString();
-  const node = [...xml.matchAll(/<node\b[^>]+>/g)].map(m => m[0]).find(n => n.includes('content-desc="' + label + '"') || new RegExp('text="' + label + '"', 'i').test(n));
+  let node;
+  for (let attempt = 0; attempt < 5 && !node; attempt++) {
+    await device.shell('uiautomator dump /sdcard/gachlagan-test-ui.xml');
+    const xml = (await device.shell('cat /sdcard/gachlagan-test-ui.xml')).toString();
+    node = [...xml.matchAll(/<node\b[^>]+>/g)].map(m => m[0]).find(n => n.includes('content-desc="' + label + '"') || new RegExp('text="' + label + '"', 'i').test(n));
+    if (!node) await new Promise(resolve => setTimeout(resolve, 1000));
+  }
   if (!node) throw new Error('Host test control missing: ' + label);
   const text = /\btext="([^"]*)"/.exec(node)?.[1] ?? '';
   const bounds = /bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"/.exec(node).slice(1).map(Number);
@@ -54,6 +58,10 @@ try {
   await expect(page.locator('#key-area')).toBeHidden();
   assert.equal((await hostNode('Host message')).text, host.text, 'Decryption changed host editor');
   await page.locator('#lock').click(); await expect(page.locator('#read-text')).toBeEmpty();
+  await tapHost('Copy received message');
+  await expect(page.locator('#read-text')).toHaveText(text);
+  await expect(page.locator('#settings-panel')).toBeHidden();
+  await page.locator('#lock').click();
   await page.locator('#settings').click(); await expect(page.locator('#shared-key')).toHaveValue('');
   await page.locator('#restore-key').click(); await expect(page.locator('#shared-key')).toHaveValue(key);
   const vault = (await device.shell('run-as ' + pkg + ' cat shared_prefs/vault.xml')).toString();
@@ -78,7 +86,7 @@ try {
   await device.shell('input keyevent KEYCODE_BACK'); await tapHost('Host message');
   await expect(page.locator('#draft')).toHaveValue('');
   assert.deepEqual(errors, []);
-  console.log('Android emulator E2E passed: visible private draft, ciphertext-only host insertion, real clipboard auto-decryption, full reader, Android Keystore persistence, key deletion, native Unicode passphrase interoperability, and hide-to-lock.');
+  console.log('Android emulator E2E passed: compact visible draft, ciphertext-only host insertion, one-copy decryption, automatic saved-key unlock, Android Keystore persistence/deletion, native Unicode passphrase interoperability, and hide-to-lock.');
 } finally {
   if (previousIme && previousIme !== 'null') await device.shell('ime set ' + previousIme);
   if (previousHardware !== 'null') await device.shell('settings put secure show_ime_with_hard_keyboard ' + previousHardware);

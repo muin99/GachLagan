@@ -7,7 +7,7 @@ This is an implemented security feature under test, not a certification or a pro
 1. Both people manually enter the same shared secret. Prefer a generated, random 256-bit key; exchange it in person or through an independently trusted channel.
 2. Compose in the keyboard’s visible **Private draft**. Plaintext is never inserted into the messaging app during private composition. Avro is processed locally.
 3. **Encrypt & insert** places only a GK1 ciphertext envelope into the current editor. The messaging app sends it using its normal Send button.
-4. Copy a received GK1 message. While the keyboard is visible and automatic reading is enabled, the supported native clipboard event opens it in the full keyboard reader. A manual **Read copied message** button is available when OS restrictions prevent this.
+4. Copy a received GK1 message. Automatic reading is enabled by default and, while the keyboard is visible, a recognized clipboard event opens it directly in the full keyboard reader. A saved key is loaded from protected device storage automatically; without one, enter the shared key once. A toolbar **Read copied message** button is available when OS restrictions prevent automatic reading.
 5. **Private reply** clears the reader and opens the composer. There is intentionally no action that copies decrypted plaintext into the clipboard or chat.
 
 Typing plaintext into an app first and encrypting it afterward cannot stop that app from having observed the original text. Normal typing is explicitly marked as visible to the app. This build does not crawl or replace an arbitrary app’s entire draft: iOS provides limited text context, and destructive replacement can lose user text.
@@ -41,14 +41,14 @@ The version markers allow automatic recognition. Arbitrary unmarked binary from 
 - No messages or drafts are persisted. The browser preview holds secrets in session memory only; no localStorage, sessionStorage, cookies, service worker, analytics, remote fonts, or server API.
 - Native key persistence is opt-in. Android encrypts the secret using an AES-GCM wrapping key in AndroidKeyStore and stores only the encrypted blob in private preferences. App backups are disabled. Hardware backing depends on device capabilities; it is not guaranteed.
 - iOS uses a non-synchronizing Keychain item with `WhenUnlockedThisDeviceOnly`. It is private to the extension and excluded from migration to another device. Device-unlocked access is not biometric authentication for every use. Keychain items may survive uninstall; use Forget saved key to delete them.
-- Lock, hiding the keyboard, and 60 seconds of inactivity clear the active key, draft, and reader. A saved key remains encrypted until explicitly loaded or forgotten. Asynchronous crypto results from an earlier session are ignored.
+- Lock, hiding the keyboard, and 60 seconds of inactivity clear the active key, draft, and reader. A saved key remains encrypted in protected storage and can be automatically loaded on the next recognized message while the keyboard is visible. This is convenience, not per-message authentication: anyone who can use the unlocked device and keyboard may read messages protected by that saved key. Asynchronous crypto results from an earlier session are ignored.
 - Mutable buffers are cleared where practical. JavaScript/Java/Swift strings and platform crypto internals can have copies managed by runtimes; guaranteed memory zeroization is not claimed.
 - Android requests `FLAG_SECURE` for its keyboard window. Release WebViews disable debugging. The debug APK intentionally enables local WebView inspection for tests and must not be used for real secrets.
 - iOS hides/clears the keyboard on disappearance and detected screen capture. iOS cannot guarantee prevention of screenshots. Screenshots, cameras, accessibility services, malicious keyboards, a rooted/jailbroken OS, or a compromised keyboard binary remain endpoint risks.
 
 ## Clipboard and network boundaries
 
-Android’s default IME can access the clipboard subject to OS behavior. Automatic reads are optional and limited to the visible keyboard, recognized GK1/GE1 text, and bounded sizes. Clipboard history is not retained. URI clipboard data is not opened. Keys are read only through an explicit Paste key action.
+Android’s default IME can access the clipboard subject to OS behavior. Automatic reads are on by default but can be turned off in Settings; they are limited to the visible keyboard, recognized GK1/GE1 text, and bounded sizes. Clipboard history is not retained. URI clipboard data is not opened. Clipboard keys are read only through an explicit Paste key action; saved device keys can be loaded automatically for recognized encrypted messages.
 
 iOS clipboard access may require Full Access and system paste approval. Extensions cannot execute continuously in the background; copying while the extension is absent cannot immediately display a reader. Opening the keyboard allows the next attempt. The OS may still require tapping Read copied message. No permission bypass is attempted.
 

@@ -24,8 +24,8 @@ The demo uses a public test key and a simulated clipboard. It is for review, not
 1. Open keyboard settings on both phones. Enter the same generated key or long shared passphrase, exchanged in person. Save it in protected device storage if desired.
 2. Type into the **Private draft**. The words are visible to you and remain inside the keyboard. Tap বাংলা for local Avro phonetic: `ami` → `আমি`, `bangladesh` → `বাংলাদেশ`.
 3. Tap **Encrypt & insert**. Only the ciphertext enters the chat. Use the chat app’s Send button.
-4. Copy a received GK1 message. With automatic reading enabled and OS access allowed, the visible keyboard displays it in a full reading panel. Otherwise tap **Read copied message**. No manual paste into the chat is needed.
-5. Tap **Private reply** to compose again. Lock clears the active key and plaintext. After leaving the keyboard, use Settings → Use saved key, or enter your key again.
+4. Copy a received GK1 message. Automatic reading is on by default: while the keyboard is visible and OS clipboard access is allowed, the message opens directly in the reader. A saved device key is loaded automatically; otherwise enter the shared key once. If your OS misses the copy event, tap the small **Read copied message** button in the toolbar. No paste into the chat is needed.
+5. Tap **Private reply** to compose again. Lock clears the active key and plaintext. A saved key can unlock automatically on the next copied message; otherwise enter your key again.
 
 Settings separate authenticated AES-256-GCM encryption from binary, hex, octal, Base64url, and Morse **encodings**. Encodings are public and need no key. Morse supports English letters/numbers/common punctuation and decodes in uppercase; use byte encodings for Bangla. Hashes cannot be decrypted and are not presented as messaging modes.
 

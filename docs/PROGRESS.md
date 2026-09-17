@@ -5,7 +5,7 @@ Branch: `feature/offline-encrypted-keyboard`. Baseline: `fca525a` on `main`.
 ## Implemented in this branch
 
 - Shared private composer with visible plaintext draft; ciphertext only enters the host app after Encrypt & insert.
-- Local message reader, settings, Avro typing, and unkeyed encoding modes.
+- Compact local message reader, settings, Avro typing, and unkeyed encoding modes. Copying a recognized message opens the reader automatically by default; a protected saved key is loaded on demand, while a missing key prompts once. The toolbar keeps a manual clipboard fallback.
 - Versioned authenticated encryption using platform AES-256-GCM. Generated 256-bit shared keys are the recommended mode; custom passphrases are supported with PBKDF2-HMAC-SHA256 (600,000 iterations).
 - Native crypto implementations for Android and iOS plus a browser implementation for interop and interface tests.
 
@@ -15,10 +15,10 @@ Branch: `feature/offline-encrypted-keyboard`. Baseline: `fca525a` on `main`.
 | --- | --- | --- |
 | `npm run verify` | 12 tests passed; shared keyboard builds/syncs | Avro, Unicode, crypto, encodings, wrong keys, tampering, limits |
 | `npm run test:interop` | 54 checks passed | Web Crypto, Java JCA, Apple CryptoKit/CommonCrypto on macOS; generated keys, passphrases, Unicode normalization, tamper rejection |
-| `npm run test:e2e` | 7 browser E2E tests passed | Visible draft, ciphertext-only host, copy/decrypt/reply, wrong key, XSS-as-text, Avro/backspace, locking, in-flight cancellation, offline operation, no web storage, accessibility at 320px |
+| `npm run test:e2e` | 9 browser E2E tests passed | Compact visible draft, ciphertext-only host, one-copy decrypt/reply, first-time key prompt, automatic-read opt-out, wrong key, XSS-as-text, Avro/backspace, locking, in-flight cancellation, offline operation, no web storage, accessibility at 320px |
 | Android `assembleDebug assembleRelease` | Passed | Installable debug APK and unsigned release APK |
 | Android `lintDebug` | Passed, 0 errors / 8 warnings | Remaining warnings concern newer dependency versions, intentional bundled JavaScript, and debug-only untranslated test labels |
-| `npm run test:android` | Passed on API 35 emulator | Actual IME/editor connection, visible plaintext in keyboard only, native encryption/insertion, actual clipboard auto-decryption, full reader, Keystore save/restore/delete, native Unicode passphrase → Web Crypto interoperability, hide-to-lock |
+| `npm run test:android` | Passed on API 35 emulator | Actual IME/editor connection, visible plaintext in keyboard only, native encryption/insertion, one-copy auto-decryption, automatic saved-key unlock after Lock, Keystore save/restore/delete, native Unicode passphrase → Web Crypto interoperability, hide-to-lock |
 | Release manifest inspection | Passed | No INTERNET, no debug host, no debuggable flag; backups disabled and explicit transfer exclusions |
 | Swift parser and Xcode project plist checks | Passed | Syntax/project structure only, not iOS compilation |
 | Visual review | Desktop and mobile captured | `design/preview-desktop.png`, `design/preview-mobile.png` |

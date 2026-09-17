@@ -14,7 +14,7 @@ final class KeyboardViewController: UIInputViewController, WKScriptMessageHandle
   private var web: WKWebView!
   private var resourceDirectory: URL!
   private var visible = false
-  private var autoRead = false
+  private var autoRead = UserDefaults.standard.object(forKey: "autoRead") as? Bool ?? true
   private var generation = 0
   private var queuedOperations = 0
   private let cryptoQueue = DispatchQueue(label: "com.gachlagan.keyboard.crypto", qos: .userInitiated)
@@ -34,7 +34,7 @@ final class KeyboardViewController: UIInputViewController, WKScriptMessageHandle
     NSLayoutConstraint.activate([
       web.leadingAnchor.constraint(equalTo: view.leadingAnchor), web.trailingAnchor.constraint(equalTo: view.trailingAnchor),
       web.topAnchor.constraint(equalTo: view.topAnchor), web.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-      view.heightAnchor.constraint(equalToConstant: 490)
+      view.heightAnchor.constraint(equalToConstant: 420)
     ])
     guard let url = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "secure") else { return }
     resourceDirectory = url.deletingLastPathComponent(); web.loadFileURL(url, allowingReadAccessTo: resourceDirectory)
@@ -113,14 +113,14 @@ final class KeyboardViewController: UIInputViewController, WKScriptMessageHandle
         autoRead = body["enabled"] as? Bool ?? false
         UserDefaults.standard.set(method, forKey: "messageMode"); UserDefaults.standard.set(autoRead, forKey: "autoRead")
       case "loadSettings":
-        autoRead = UserDefaults.standard.bool(forKey: "autoRead")
+        autoRead = UserDefaults.standard.object(forKey: "autoRead") as? Bool ?? true
         result = ["method": UserDefaults.standard.string(forKey: "messageMode") ?? "secure", "autoRead": autoRead]
       case "lock": generation += 1; session = generation
       case "next": advanceToNextInputMode()
       default: throw MessageCrypto.Failure("Unknown keyboard action.")
       }
       respond(id, result: result, error: nil, session: session)
-      if op == "autoRead" { clipboardChanged() }
+      if op == "autoRead" || op == "loadSettings" { clipboardChanged() }
     } catch { respond(id, result: nil, error: error.localizedDescription, session: session) }
   }
   func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {

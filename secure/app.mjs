@@ -2,7 +2,7 @@ import { checkSecret, checkText, decode, encode, parseEnvelope, MAX_BYTES, MAX_W
 import { native, request } from './bridge.mjs';
 const $ = id => document.getElementById(id);
 let secret = '', method = 'secure', panel = 'compose', language = 'en', shift = false, symbols = false;
-let plainMode = false, busy = false, epoch = 0, rawDraft = '', pendingWire = '', lastWire = '', autoRead = false;
+let plainMode = false, busy = false, epoch = 0, rawDraft = '', pendingWire = '', lastWire = '', autoRead = true;
 let activeField = $('draft'), expiry;
 const utf8 = new TextEncoder();
 function status(text, error = false) { $('status').textContent = text; $('status').classList.toggle('error', error); }
@@ -11,7 +11,7 @@ function show(which) {
   panel = which;
   for (const name of ['compose', 'read', 'settings']) $(name + '-panel').hidden = name !== which;
   $('key-area').hidden = which === 'read';
-  $('compose-tab').classList.toggle('active', which === 'compose'); $('read-tab').classList.toggle('active', which === 'read');
+  $('compose-tab').classList.toggle('active', which === 'compose');
   activeField = which === 'settings' ? $('shared-key') : $('draft');
 }
 function updateMode() {
@@ -27,7 +27,7 @@ function renderDraft() {
   $('draft').value = language === 'bn' ? window.OmicronLab.Avro.Phonetic.parse(rawDraft) : rawDraft;
   $('draft').scrollTop = $('draft').scrollHeight;
 }
-function setBusy(value) { busy = value; $('encrypt').disabled = value; $('read-clipboard').disabled = value; $('draft').readOnly = value; }
+function setBusy(value) { busy = value; $('encrypt').disabled = value; $('read-clipboard').disabled = value; $('read-copied').disabled = value; $('draft').readOnly = value; }
 async function insert() {
   if (busy || plainMode) return;
   if (method === 'secure' && !secret) { show('settings'); status('Add the same shared key on both phones first.'); return; }
@@ -48,11 +48,20 @@ async function read(wire, automatic = false) {
   if (typeof wire !== 'string' || wire.length > MAX_WIRE) { if (!automatic) status('Clipboard message is too large.', true); return; }
   wire = wire.trim();
   if (!/^(GK1|GE1)\./.test(wire)) { if (!automatic) { show('read'); $('read-error').textContent = 'Copy a complete GK1 encrypted or GE1 encoded message first.'; } return; }
-  if (automatic && wire === lastWire) return;
-  if (wire.startsWith('GK1.') && !secret) {
-    pendingWire = wire; show('settings'); status('Copied message found. Enter your shared key to read it.'); return;
-  }
+  if (automatic && wire === lastWire && panel === 'read') return;
   const current = epoch;
+  if (wire.startsWith('GK1.') && !secret) {
+    try {
+      setBusy(true);
+      const saved = await request('loadKey');
+      if (current !== epoch) return;
+      if (saved) { checkSecret(saved); secret = saved; }
+      else { pendingWire = wire; show('settings'); status('Copied message found. Enter your shared key to read it.'); return; }
+    } catch (error) {
+      if (current === epoch) { pendingWire = wire; show('settings'); status('Saved key unavailable. Enter your shared key to read it.', true); }
+      return;
+    } finally { if (current === epoch) setBusy(false); }
+  }
   show('read'); $('read-text').textContent = ''; $('read-error').textContent = ''; $('reply').hidden = true;
   $('reader-title').textContent = 'Opening your message…';
   try {
@@ -134,7 +143,6 @@ $('draft').addEventListener('keydown', e => {
 $('encrypt').onclick = insert;
 $('settings').onclick = $('mode-pill').onclick = () => { if (busy) return; $('shared-key').value = secret; show('settings'); };
 $('compose-tab').onclick = () => { clearReader(); show('compose'); };
-$('read-tab').onclick = () => show('read');
 $('close-settings').onclick = () => { $('shared-key').value = ''; show('compose'); };
 $('lock').onclick = () => lock();
 $('reply').onclick = () => { clearReader(); plainMode = false; method = 'secure'; $('method').value = 'secure'; updateMode(); show('compose'); };
@@ -168,7 +176,9 @@ $('save-settings').onclick = async () => {
     if (pendingWire) await read(pendingWire);
   } catch (error) { if (current === epoch) status(error.message, true); }
 };
-$('read-clipboard').onclick = async () => { try { await read(await request('clipboard')); } catch (e) { status('Clipboard access unavailable. Allow access in system settings, then try again.', true); } };
+const readClipboard = async () => { try { await read(await request('clipboard')); } catch (e) { status('Clipboard access unavailable. Allow access in system settings, then try again.', true); } };
+$('read-clipboard').onclick = readClipboard;
+$('read-copied').onclick = readClipboard;
 $('next-keyboard').onclick = () => { lock(); request('next').catch(e => status(e.message, true)); };
 window.gachlaganClipboard = wire => read(wire, true);
 window.gachlaganLock = () => lock('Locked when the keyboard was hidden.');

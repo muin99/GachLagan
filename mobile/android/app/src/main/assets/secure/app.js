@@ -170,7 +170,7 @@
   var rawDraft = "";
   var pendingWire = "";
   var lastWire = "";
-  var autoRead = false;
+  var autoRead = true;
   var activeField = $("draft");
   var expiry;
   var utf82 = new TextEncoder();
@@ -187,7 +187,6 @@
     for (const name of ["compose", "read", "settings"]) $(name + "-panel").hidden = name !== which;
     $("key-area").hidden = which === "read";
     $("compose-tab").classList.toggle("active", which === "compose");
-    $("read-tab").classList.toggle("active", which === "read");
     activeField = which === "settings" ? $("shared-key") : $("draft");
   }
   function updateMode() {
@@ -208,6 +207,7 @@
     busy = value;
     $("encrypt").disabled = value;
     $("read-clipboard").disabled = value;
+    $("read-copied").disabled = value;
     $("draft").readOnly = value;
   }
   async function insert() {
@@ -249,14 +249,33 @@
       }
       return;
     }
-    if (automatic && wire === lastWire) return;
-    if (wire.startsWith("GK1.") && !secret) {
-      pendingWire = wire;
-      show("settings");
-      status("Copied message found. Enter your shared key to read it.");
-      return;
-    }
+    if (automatic && wire === lastWire && panel === "read") return;
     const current = epoch;
+    if (wire.startsWith("GK1.") && !secret) {
+      try {
+        setBusy(true);
+        const saved = await request("loadKey");
+        if (current !== epoch) return;
+        if (saved) {
+          checkSecret(saved);
+          secret = saved;
+        } else {
+          pendingWire = wire;
+          show("settings");
+          status("Copied message found. Enter your shared key to read it.");
+          return;
+        }
+      } catch (error) {
+        if (current === epoch) {
+          pendingWire = wire;
+          show("settings");
+          status("Saved key unavailable. Enter your shared key to read it.", true);
+        }
+        return;
+      } finally {
+        if (current === epoch) setBusy(false);
+      }
+    }
     show("read");
     $("read-text").textContent = "";
     $("read-error").textContent = "";
@@ -425,7 +444,6 @@
     clearReader();
     show("compose");
   };
-  $("read-tab").onclick = () => show("read");
   $("close-settings").onclick = () => {
     $("shared-key").value = "";
     show("compose");
@@ -528,13 +546,15 @@
       if (current === epoch) status(error.message, true);
     }
   };
-  $("read-clipboard").onclick = async () => {
+  var readClipboard = async () => {
     try {
       await read(await request("clipboard"));
     } catch (e) {
       status("Clipboard access unavailable. Allow access in system settings, then try again.", true);
     }
   };
+  $("read-clipboard").onclick = readClipboard;
+  $("read-copied").onclick = readClipboard;
   $("next-keyboard").onclick = () => {
     lock();
     request("next").catch((e) => status(e.message, true));
