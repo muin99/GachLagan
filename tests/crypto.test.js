@@ -47,3 +47,25 @@ test('binary, octal, hex and base64 preserve Unicode; Morse is explicitly upperc
   assert.throws(() => encode('বাংলা', 'morse'), /Bangla/);
   for (const wire of ['GE1.octal.400', 'GE1.hex.ff', 'GE1.binary.011', 'GE1.morse..x', 'GE1.hex.00  gg']) assert.throws(() => decode(wire));
 });
+test('expanded public encodings round-trip and reject damaged bytes', async () => {
+  const { encode, decode, ENCODING_MODES } = await core;
+  assert.equal(ENCODING_MODES.length, 10);
+  for (const mode of ['decimal', 'base32', 'base64classic', 'percent', 'rot13']) {
+    assert.equal(decode(encode('বাংলা 🌱 Hello!', mode)).text, 'বাংলা 🌱 Hello!');
+  }
+  for (const value of ['GE1.decimal.999', 'GE1.base32.A', 'GE1.base64classic.YQ', 'GE1.percent.%4g']) assert.throws(() => decode(value));
+});
+test('length-framed adjacent messages stay separate and damaged tails fail closed', async () => {
+  const { frameMessage, parseMessages, isRecognized, MAX_FRAMES } = await import('../secure/framing.mjs');
+  const { generateKey, seal, open, encode } = await core;
+  const key = generateKey(), first = await seal('first 🌱', key), second = await seal('second বাংলা', key);
+  const copy = frameMessage(first) + frameMessage(second);
+  const parsed = parseMessages(copy);
+  assert.deepEqual(await Promise.all(parsed.map(wire => open(wire, key))), ['first 🌱', 'second বাংলা']);
+  assert.equal(isRecognized(copy), true);
+  assert.deepEqual(parseMessages(first), [first]);
+  assert.equal(parseMessages(frameMessage(encode('Hi', 'base32'))).length, 1);
+  for (const corrupt of [copy.replace('[[/GK2]]', '[[/GE2]]'), copy.replace(/\[\[GK2:\d+\]\]/, '[[GK2:1]]'), copy + 'junk', frameMessage(first).slice(0, -3), frameMessage(first).repeat(MAX_FRAMES + 1)]) {
+    assert.throws(() => parseMessages(corrupt));
+  }
+});

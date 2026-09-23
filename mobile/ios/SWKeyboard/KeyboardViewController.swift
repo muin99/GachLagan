@@ -53,7 +53,9 @@ final class KeyboardViewController: UIInputViewController, WKScriptMessageHandle
   @objc private func captureChanged() { if UIScreen.main.isCaptured { protectScreen() } else { restoreScreen() } }
   @objc private func clipboardChanged() {
     guard visible, autoRead, hasFullAccess else { return }
-    guard let value = UIPasteboard.general.string, value.utf8.count <= 40000, value.hasPrefix("GK1.") || value.hasPrefix("GE1.") else { return }
+    guard let value = UIPasteboard.general.string, value.utf8.count <= 40000 else { return }
+    let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard trimmed.hasPrefix("GK1.") || trimmed.hasPrefix("GE1.") || trimmed.hasPrefix("[[GK2:") || trimmed.hasPrefix("[[GE2:") else { return }
     call("window.gachlaganClipboard", argument: value)
   }
   private func call(_ function: String, argument: Any) {
@@ -100,7 +102,7 @@ final class KeyboardViewController: UIInputViewController, WKScriptMessageHandle
       switch op {
       case "insert", "plain":
         guard let text = body["text"] as? String, text.utf8.count <= 40000 else { throw MessageCrypto.Failure("Invalid output.") }
-        if op == "insert" && !text.hasPrefix("GK1.") && !text.hasPrefix("GE1.") { throw MessageCrypto.Failure("Invalid output.") }
+        if op == "insert" && !text.hasPrefix("[[GK2:") && !text.hasPrefix("[[GE2:") { throw MessageCrypto.Failure("Invalid output.") }
         textDocumentProxy.insertText(text)
       case "backspace": textDocumentProxy.deleteBackward()
       case "clipboard":
@@ -109,7 +111,7 @@ final class KeyboardViewController: UIInputViewController, WKScriptMessageHandle
         guard value.utf8.count <= 40000 else { throw MessageCrypto.Failure("Clipboard message is too large.") }; result = value
       case "autoRead":
         let method = body["method"] as? String ?? "secure"
-        guard ["secure", "binary", "hex", "octal", "base64", "morse"].contains(method) else { throw MessageCrypto.Failure("Unknown mode.") }
+        guard ["secure", "binary", "hex", "octal", "decimal", "base32", "base64", "base64classic", "percent", "rot13", "morse"].contains(method) else { throw MessageCrypto.Failure("Unknown mode.") }
         autoRead = body["enabled"] as? Bool ?? false
         UserDefaults.standard.set(method, forKey: "messageMode"); UserDefaults.standard.set(autoRead, forKey: "autoRead")
       case "loadSettings":

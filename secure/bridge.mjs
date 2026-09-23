@@ -16,7 +16,7 @@ export async function request(op, args = {}) {
     if (op === 'insert' || op === 'plain' || op === 'backspace' || op === 'next') {
       window.parent.postMessage({ source: 'gachlagan', op, ...args }, window.location.origin); return true;
     }
-    if (op === 'clipboard') return navigator.clipboard.readText();
+    if (op === 'clipboard') return window.gachlaganPreviewClipboard ?? navigator.clipboard.readText();
     if (op === 'saveKey') throw new Error('The browser preview keeps keys in memory only.');
     if (op === 'loadKey') return '';
     return true;

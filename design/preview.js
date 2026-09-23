@@ -8,7 +8,10 @@ window.addEventListener('message', event => {
   if (!side) return;
   const host = document.getElementById(side + '-host');
   if (event.data.op === 'insert' || event.data.op === 'plain') host.value += event.data.text;
-  else if (event.data.op === 'backspace') host.value = [...host.value].slice(0, -1).join('');
+  else if (event.data.op === 'backspace') {
+    const last = [...new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(host.value)].at(-1);
+    host.value = host.value.slice(0, last?.index ?? 0);
+  }
 });
 function send(side) {
   const host = document.getElementById(side + '-host'), text = host.value;

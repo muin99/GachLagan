@@ -10,7 +10,7 @@
 <body>
 <main class="keyboard" aria-label="Gachlagan keyboard">
   <header class="toolbar">
-    <button id="compose-tab" class="tab active" aria-label="Private composer"><span class="lock-icon" aria-hidden="true"></span> Private</button>
+    <span class="toolbar-brand"><span class="lock-icon" aria-hidden="true"></span> GACHLAGAN</span>
     <span class="toolbar-spacer"></span>
     <button id="read-copied" class="icon-button" aria-label="Read copied message" title="Read copied message">▣</button>
     <button id="lock" class="icon-button" aria-label="Lock and clear keyboard" title="Lock and clear">⌑</button>
@@ -18,7 +18,7 @@
   </header>
   <div id="status" class="status" role="status" aria-live="polite">Your words stay here until you encrypt.</div>
   <section id="compose-panel" class="panel">
-    <div class="composer-top"><span id="draft-label">PRIVATE DRAFT</span><button id="plain-mode" class="text-button">Normal typing ↗</button></div>
+    <div class="composer-top"><span id="draft-label">PRIVATE DRAFT</span><span class="composer-tools"><button id="paste-draft" class="text-button" aria-label="Paste copied ciphertext into private draft">Paste ↧</button><button id="plain-mode" class="text-button">Normal typing ↗</button></span></div>
     <textarea id="draft" aria-label="Private message" placeholder="Say it only to them…" rows="2" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" inputmode="none"></textarea>
     <div class="action-row"><button id="mode-pill" class="mode-pill"><span class="dot"></span><span id="mode-label">AES-256-GCM</span></button><button id="encrypt" class="primary"><span class="lock-icon" aria-hidden="true"></span><span id="encrypt-label">Encrypt & insert</span><span aria-hidden="true">↗</span></button></div>
   </section>
@@ -31,21 +31,28 @@
   </section>
   <section id="settings-panel" class="panel settings" hidden>
     <div class="section-heading"><div><p class="eyebrow">MAKE IT YOURS</p><h1>Keyboard settings</h1></div><button id="close-settings" class="icon-button" aria-label="Close settings">×</button></div>
-    <label class="field-label" for="method">Message mode</label>
-    <select id="method"><option value="secure">Private · AES-256-GCM</option><optgroup label="Encodings · anyone can decode"><option value="binary">Binary · 01001000</option><option value="hex">Hexadecimal · 48 69</option><option value="octal">Octal · 110 151</option><option value="base64">Base64url · SGk</option><option value="morse">Morse · .... ..</option></optgroup></select>
+    <label class="field-label" for="method-picker">Message mode</label>
+    <input id="method" type="hidden" value="secure">
+    <button id="method-picker" class="picker-button" type="button" aria-haspopup="dialog"><span id="method-choice">Private · AES-256-GCM</span><span aria-hidden="true">⌄</span></button>
     <p id="method-help" class="helper">Authenticated encryption. Both people need the same key.</p>
     <div id="key-settings">
       <div class="label-row"><label class="field-label" for="shared-key">Your shared key or passphrase</label><button id="generate" class="text-button">Generate key</button></div>
       <input id="shared-key" type="password" inputmode="none" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Enter the same secret on both phones">
+      <button id="keypad-done" class="text-button" type="button" hidden>Done typing ✓</button>
       <div class="label-row"><label class="checkbox-label"><input id="show-key" type="checkbox"> Show key</label><button id="paste-key" class="text-button">Paste key</button></div>
-      <p class="helper">A generated 256-bit key is recommended. Share it in person. For a custom passphrase, use 5–6 randomly chosen words.</p>
+      <p class="helper">Generated key: fast. Custom passphrase: slower by design. Share either one in person.</p>
       <label class="checkbox-label" id="remember-row"><input id="remember" type="checkbox"> Save key in this device’s protected storage</label>
       <div class="label-row"><button id="restore-key" class="text-button">Use saved key</button><button id="forget-key" class="text-button danger">Forget saved key</button></div>
     </div>
     <label class="checkbox-label"><input id="auto-read" type="checkbox" checked> Automatically read copied GK1 / GE1 messages</label>
-    <p class="helper">Only while this keyboard is open. Your OS may ask for clipboard access. Plain text is ignored.</p>
-    <p class="helper safety-note">Encodings are not private. Hashes are one-way, so they are not messaging modes. Keys and messages clear from the screen when you lock or leave the keyboard.</p>
+    <p class="helper">Visible keyboard only; ordinary clipboard text is ignored.</p>
+    <p class="helper safety-note">Encodings are public. Hashes cannot be decrypted. Lock clears this session.</p>
     <button id="save-settings" class="primary full-width">Use these settings</button>
+  </section>
+  <section id="modes-panel" class="panel modes" role="dialog" aria-label="Choose message mode" hidden>
+    <div class="section-heading"><h1>Message mode</h1><button id="close-modes" class="icon-button" aria-label="Close message modes">×</button></div>
+    <p class="helper">Only Private uses a key and protects your words. Other modes are public conversions.</p>
+    <div id="mode-options" class="mode-options"></div>
   </section>
   <div id="key-area" class="key-area" aria-label="On-screen keyboard"></div>
   <footer class="keyboard-footer"><button id="next-keyboard" class="text-button" aria-label="Switch system keyboard">◎</button><span id="footer-label">GACHLAGAN <span class="footer-dot">·</span> ON-DEVICE</span><span class="footer-mark" aria-hidden="true">⌄</span></footer>

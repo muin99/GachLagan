@@ -103,7 +103,7 @@ public final class SecureKeyboardService extends InputMethodService {
   }
   private void readAutomatically() {
     if (!visible || !autoRead || sensitiveField || web == null) return;
-    try { String value = copied(); if (value.startsWith("GK1.") || value.startsWith("GE1.")) web.evaluateJavascript("window.gachlaganClipboard&&window.gachlaganClipboard(" + JSONObject.quote(value) + ")", null); }
+    try { String value = copied(); String trimmed = value.trim(); if (trimmed.startsWith("GK1.") || trimmed.startsWith("GE1.") || trimmed.startsWith("[[GK2:") || trimmed.startsWith("[[GE2:")) web.evaluateJavascript("window.gachlaganClipboard&&window.gachlaganClipboard(" + JSONObject.quote(value) + ")", null); }
     catch (Exception ignored) { /* Denied clipboard access is not an error to log with content. */ }
   }
   private void respond(int id, Object result, String error, int session) {
@@ -148,15 +148,27 @@ public final class SecureKeyboardService extends InputMethodService {
         case "insert": case "plain": {
           if (sensitiveField) throw new IllegalArgumentException("This keyboard does not insert into password fields.");
           String text = message.getString("text");
-          if (text.length() > 40000 || (op.equals("insert") && !text.startsWith("GK1.") && !text.startsWith("GE1."))) throw new IllegalArgumentException("Invalid output.");
+          if (text.length() > 40000 || (op.equals("insert") && !text.startsWith("[[GK2:") && !text.startsWith("[[GE2:"))) throw new IllegalArgumentException("Invalid output.");
           InputConnection connection = getCurrentInputConnection();
           if (connection == null || !connection.commitText(text, 1)) throw new IllegalArgumentException("The app did not accept the message. Your draft is still here."); break;
         }
-        case "backspace": { InputConnection connection = getCurrentInputConnection(); if (connection != null) connection.deleteSurroundingTextInCodePoints(1, 0); break; }
+        case "backspace": {
+          InputConnection connection = getCurrentInputConnection();
+          if (connection != null) {
+            CharSequence before = connection.getTextBeforeCursor(64, 0);
+            if (before != null && before.length() > 0) {
+              android.icu.text.BreakIterator iterator = android.icu.text.BreakIterator.getCharacterInstance();
+              iterator.setText(before.toString()); int start = iterator.preceding(before.length());
+              int count = Character.codePointCount(before, Math.max(0, start), before.length());
+              connection.deleteSurroundingTextInCodePoints(Math.max(1, count), 0);
+            }
+          }
+          break;
+        }
         case "clipboard": result = copied(); break;
         case "autoRead": {
           String method = message.optString("method", "secure");
-          if (!java.util.Arrays.asList("secure", "binary", "hex", "octal", "base64", "morse").contains(method)) throw new IllegalArgumentException("Unknown mode.");
+          if (!java.util.Arrays.asList("secure", "binary", "hex", "octal", "decimal", "base32", "base64", "base64classic", "percent", "rot13", "morse").contains(method)) throw new IllegalArgumentException("Unknown mode.");
           autoRead = message.getBoolean("enabled");
           getSharedPreferences("settings", MODE_PRIVATE).edit().putString("method", method).putBoolean("autoRead", autoRead).apply(); break;
         }

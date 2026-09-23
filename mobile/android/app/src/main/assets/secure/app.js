@@ -77,7 +77,41 @@
   }
   var MORSE = Object.fromEntries("A .-|B -...|C -.-.|D -..|E .|F ..-.|G --.|H ....|I ..|J .---|K -.-|L .-..|M --|N -.|O ---|P .--.|Q --.-|R .-.|S ...|T -|U ..-|V ...-|W .--|X -..-|Y -.--|Z --..|0 -----|1 .----|2 ..---|3 ...--|4 ....-|5 .....|6 -....|7 --...|8 ---..|9 ----.|. .-.-.-|, --..--|? ..--..|! -.-.--|: ---...|; -.-.-.|- -....-|/ -..-.|@ .--.-.|= -...-|+ .-.-.|( -.--.|) -.--.-".split("|").map((s) => s.split(" ")));
   var INVERSE_MORSE = Object.fromEntries(Object.entries(MORSE).map(([k, v]) => [v, k]));
-  var bases = { binary: [2, 8], octal: [8, 3], hex: [16, 2] };
+  var bases = { binary: [2, 8], octal: [8, 3], decimal: [10, 3], hex: [16, 2] };
+  var BASE32 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+  function base32(bytes) {
+    let bits = 0, value = 0, result = "";
+    for (const byte of bytes) {
+      value = value << 8 | byte;
+      bits += 8;
+      while (bits >= 5) {
+        result += BASE32[value >>> (bits -= 5) & 31];
+      }
+      value &= (1 << bits) - 1;
+    }
+    if (bits) result += BASE32[value << 5 - bits & 31];
+    return result;
+  }
+  function unbase32(body) {
+    if (!/^[A-Z2-7]+$/.test(body) || body.length > Math.ceil(MAX_BYTES * 8 / 5)) throw new Error("Invalid Base32 text.");
+    const bytes = [];
+    let bits = 0, value = 0;
+    for (const char of body) {
+      value = value << 5 | BASE32.indexOf(char);
+      bits += 5;
+      if (bits >= 8) {
+        bytes.push(value >>> (bits -= 8) & 255);
+        value &= (1 << bits) - 1;
+      }
+    }
+    const result = Uint8Array.from(bytes);
+    if (base32(result) !== body) throw new Error("Invalid Base32 text.");
+    return result;
+  }
+  function rot13(text) {
+    return text.replace(/[A-Za-z]/g, (char) => String.fromCharCode(char.charCodeAt(0) + (char.toLowerCase() <= "m" ? 13 : -13)));
+  }
+  var ENCODING_MODES = ["binary", "octal", "decimal", "hex", "base32", "base64", "base64classic", "percent", "rot13", "morse"];
   function encode(text, mode) {
     checkText(text);
     let body;
@@ -87,17 +121,22 @@
     } else if (bases[mode]) {
       const [base, width] = bases[mode];
       body = [...utf8.encode(text)].map((b) => b.toString(base).padStart(width, "0")).join(" ");
-    } else if (mode === "base64") body = b64(utf8.encode(text));
+    } else if (mode === "base32") body = base32(utf8.encode(text));
+    else if (mode === "base64") body = b64(utf8.encode(text));
+    else if (mode === "base64classic") body = btoa(String.fromCharCode(...utf8.encode(text)));
+    else if (mode === "percent") body = [...utf8.encode(text)].map((byte) => "%" + byte.toString(16).toUpperCase().padStart(2, "0")).join("");
+    else if (mode === "rot13") body = rot13(text);
     else throw new Error("Unknown encoding.");
     return `GE1.${mode}.${body}`;
   }
   function decode(wire) {
     if (typeof wire !== "string" || wire.length > MAX_WIRE) throw new Error("Message is too large.");
-    const match = /^GE1\.(binary|octal|hex|base64|morse)\.([\s\S]+)$/.exec(wire.trim());
+    const match = /^GE1\.(binary|octal|decimal|hex|base32|base64|base64classic|percent|rot13|morse)\.([\s\S]+)$/.exec(wire.trim());
     if (!match) throw new Error("Copy the complete GE1 encoded message.");
     const [, mode, body] = match;
     let text;
-    if (mode === "morse") {
+    if (mode === "rot13") text = rot13(body);
+    else if (mode === "morse") {
       text = body.split(" ").map((code) => {
         if (code === "/") return " ";
         if (!INVERSE_MORSE[code]) throw new Error("Invalid Morse code.");
@@ -106,8 +145,16 @@
     } else {
       let bytes;
       if (mode === "base64") bytes = unb64(body);
-      else {
-        const [base, width] = bases[mode], valid = { binary: /^[01]+$/, octal: /^[0-7]+$/, hex: /^[0-9a-f]+$/ }[mode];
+      else if (mode === "base64classic") {
+        if (!/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(body)) throw new Error("Invalid Base64 text.");
+        bytes = Uint8Array.from(atob(body), (char) => char.charCodeAt(0));
+        if (btoa(String.fromCharCode(...bytes)) !== body) throw new Error("Invalid Base64 text.");
+      } else if (mode === "base32") bytes = unbase32(body);
+      else if (mode === "percent") {
+        if (!/^(?:%[0-9A-F]{2})+$/.test(body) || body.length > MAX_BYTES * 3) throw new Error("Invalid percent-encoded text.");
+        bytes = Uint8Array.from(body.match(/%[0-9A-F]{2}/g), (token) => parseInt(token.slice(1), 16));
+      } else {
+        const [base, width] = bases[mode], valid = { binary: /^[01]+$/, octal: /^[0-7]+$/, decimal: /^[0-9]+$/, hex: /^[0-9a-f]+$/ }[mode];
         const tokens = body.split(" ");
         if (tokens.length > MAX_BYTES || tokens.some((t) => t.length !== width || !valid.test(t) || parseInt(t, base) > 255)) throw new Error("Invalid encoded bytes.");
         bytes = Uint8Array.from(tokens, (t) => parseInt(t, base));
@@ -116,6 +163,44 @@
     }
     checkText(text);
     return { text, mode };
+  }
+
+  // secure/framing.mjs
+  var MAX_FRAMES = 16;
+  var HEADER = /^\[\[(GK2|GE2):([1-9][0-9]{0,4})\]\]/;
+  function frameMessage(wire) {
+    if (typeof wire !== "string" || !/^(GK1|GE1)\./.test(wire) || wire.length > MAX_WIRE) throw new Error("Invalid message to insert.");
+    const kind = wire.startsWith("GK1.") ? "GK2" : "GE2";
+    const framed = `[[${kind}:${wire.length}]]${wire}[[/${kind}]]`;
+    if (framed.length > MAX_WIRE) throw new Error("Encoded message is too large to insert.");
+    return framed;
+  }
+  function parseMessages(text) {
+    if (typeof text !== "string" || text.length > MAX_WIRE) throw new Error("Copied message is too large.");
+    const input = text.trim();
+    if (/^(GK1|GE1)\./.test(input)) return [input];
+    const messages = [];
+    let offset = 0;
+    while (offset < input.length) {
+      while (/\s/.test(input[offset] ?? "")) offset++;
+      if (offset === input.length) break;
+      const match = HEADER.exec(input.slice(offset));
+      if (!match) throw new Error("Copy complete Gachlagan messages, including their headers and tails.");
+      const [header, kind, count] = match, length = Number(count);
+      if (length > MAX_WIRE || messages.length >= MAX_FRAMES) throw new Error("Too many or oversized messages in this copy.");
+      const start = offset + header.length, end = start + length, tail = `[[/${kind}]]`;
+      const wire = input.slice(start, end);
+      if (input.slice(end, end + tail.length) !== tail || !wire.startsWith(kind === "GK2" ? "GK1." : "GE1.")) {
+        throw new Error("A copied message is incomplete or has a damaged tail.");
+      }
+      messages.push(wire);
+      offset = end + tail.length;
+    }
+    if (!messages.length) throw new Error("Copy a complete Gachlagan message first.");
+    return messages;
+  }
+  function isRecognized(text) {
+    return typeof text === "string" && /^(?:GK1\.|GE1\.|\[\[(?:GK2|GE2):)/.test(text.trim());
   }
 
   // secure/bridge.mjs
@@ -138,7 +223,7 @@
         window.parent.postMessage({ source: "gachlagan", op, ...args }, window.location.origin);
         return true;
       }
-      if (op === "clipboard") return navigator.clipboard.readText();
+      if (op === "clipboard") return window.gachlaganPreviewClipboard ?? navigator.clipboard.readText();
       if (op === "saveKey") throw new Error("The browser preview keeps keys in memory only.");
       if (op === "loadKey") return "";
       return true;
@@ -162,8 +247,10 @@
   var method = "secure";
   var panel = "compose";
   var language = "en";
-  var shift = false;
+  var shift = 0;
   var symbols = false;
+  var symbolAlt = false;
+  var emojiOpen = false;
   var plainMode = false;
   var busy = false;
   var epoch = 0;
@@ -171,9 +258,23 @@
   var pendingWire = "";
   var lastWire = "";
   var autoRead = true;
-  var activeField = $("draft");
+  var settingsKeypad = false;
+  var modeReturn = "compose";
   var expiry;
   var utf82 = new TextEncoder();
+  var MODES = [
+    ["secure", "Private \xB7 AES-256-GCM", "Authenticated encryption \xB7 shared key"],
+    ["binary", "Binary", "UTF-8 bytes \xB7 0 and 1"],
+    ["octal", "Octal", "UTF-8 bytes \xB7 base 8"],
+    ["decimal", "Decimal", "UTF-8 bytes \xB7 base 10"],
+    ["hex", "Hexadecimal", "UTF-8 bytes \xB7 base 16"],
+    ["base32", "Base32", "RFC 4648 alphabet"],
+    ["base64", "Base64url", "URL-safe alphabet"],
+    ["base64classic", "Base64", "Standard padded alphabet"],
+    ["percent", "Percent", "URL-style byte escapes"],
+    ["rot13", "ROT13", "Latin letters only; other text unchanged"],
+    ["morse", "Morse", "English letters and punctuation"]
+  ];
   function status(text, error = false) {
     $("status").textContent = text;
     $("status").classList.toggle("error", error);
@@ -183,11 +284,28 @@
     expiry = setTimeout(() => lock("Locked after 60 seconds without activity."), 6e4);
   }
   function show(which) {
+    if (which !== "settings") settingsKeypad = false;
     panel = which;
-    for (const name of ["compose", "read", "settings"]) $(name + "-panel").hidden = name !== which;
-    $("key-area").hidden = which === "read";
-    $("compose-tab").classList.toggle("active", which === "compose");
-    activeField = which === "settings" ? $("shared-key") : $("draft");
+    for (const name of ["compose", "read", "settings", "modes"]) $(name + "-panel").hidden = name !== which;
+    $("key-area").hidden = which === "read" || which === "modes" || which === "settings" && !settingsKeypad;
+    $("keypad-done").hidden = !settingsKeypad;
+    document.body.classList.toggle("settings-keypad", which === "settings" && settingsKeypad);
+  }
+  function openSettings() {
+    settingsKeypad = false;
+    $("shared-key").value = secret;
+    show("settings");
+  }
+  function methodChanged() {
+    const selected = $("method").value, secure = selected === "secure";
+    $("method-choice").textContent = MODES.find(([value]) => value === selected)?.[1] ?? MODES[0][1];
+    for (const option of $("mode-options").children) option.setAttribute("aria-pressed", String(option.dataset.mode === selected));
+    $("key-settings").hidden = !secure;
+    $("method-help").textContent = secure ? "Generated 256-bit keys are fast. Passphrases take longer to resist guessing." : selected === "morse" ? "Public. Morse uppercases English and does not support Bangla." : "Public conversion. Anyone can decode it without a key.";
+  }
+  function openModes(from) {
+    modeReturn = from;
+    show("modes");
   }
   function updateMode() {
     document.body.classList.toggle("encoding", method !== "secure");
@@ -197,6 +315,7 @@
     $("plain-mode").textContent = plainMode ? "Back to private \u2197" : "Normal typing \u2197";
     $("draft").disabled = plainMode;
     $("encrypt").hidden = plainMode;
+    $("paste-draft").hidden = plainMode;
     $("draft").placeholder = plainMode ? "Keys now type directly into your app." : "Say it only to them\u2026";
   }
   function renderDraft() {
@@ -224,7 +343,7 @@
       status(method === "secure" ? "Encrypting on this device\u2026" : "Encoding on this device\u2026");
       const wire = method === "secure" ? await request("seal", { text, secret }) : encode(text, method);
       if (current !== epoch) return;
-      await request("insert", { text: wire });
+      await request("insert", { text: frameMessage(wire) });
       if (current !== epoch) return;
       rawDraft = "";
       renderDraft();
@@ -242,16 +361,25 @@
       return;
     }
     wire = wire.trim();
-    if (!/^(GK1|GE1)\./.test(wire)) {
+    if (!isRecognized(wire)) {
       if (!automatic) {
         show("read");
-        $("read-error").textContent = "Copy a complete GK1 encrypted or GE1 encoded message first.";
+        $("read-error").textContent = "Copy a complete Gachlagan message first.";
       }
       return;
     }
     if (automatic && wire === lastWire && panel === "read") return;
+    let messages;
+    try {
+      messages = parseMessages(wire);
+    } catch (error) {
+      show("read");
+      clearReader();
+      $("read-error").textContent = error.message;
+      return;
+    }
     const current = epoch;
-    if (wire.startsWith("GK1.") && !secret) {
+    if (messages.some((message) => message.startsWith("GK1.")) && !secret) {
       try {
         setBusy(true);
         const saved = await request("loadKey");
@@ -261,14 +389,14 @@
           secret = saved;
         } else {
           pendingWire = wire;
-          show("settings");
+          openSettings();
           status("Copied message found. Enter your shared key to read it.");
           return;
         }
       } catch (error) {
         if (current === epoch) {
           pendingWire = wire;
-          show("settings");
+          openSettings();
           status("Saved key unavailable. Enter your shared key to read it.", true);
         }
         return;
@@ -283,20 +411,31 @@
     $("reader-title").textContent = "Opening your message\u2026";
     try {
       setBusy(true);
-      let text, encoded = wire.startsWith("GE1.");
-      if (encoded) text = decode(wire).text;
-      else {
-        parseEnvelope(wire);
-        text = await request("open", { wire, secret });
+      let encrypted = false, openedCount = 0;
+      async function openGroup(group, depth = 0) {
+        if (depth >= 3) throw new Error("This message has too many encryption layers.");
+        const result = [];
+        for (const item of group) {
+          if (++openedCount > 16) throw new Error("Too many messages in this copy.");
+          const secured = item.startsWith("GK1.");
+          encrypted ||= secured;
+          if (secured) parseEnvelope(item);
+          const text = secured ? await request("open", { wire: item, secret }) : decode(item).text;
+          if (current !== epoch) return [];
+          if (/^\[\[(GK2|GE2):/.test(text)) result.push(...await openGroup(parseMessages(text), depth + 1));
+          else result.push(text);
+        }
+        return result;
       }
+      const texts = await openGroup(messages);
       if (current !== epoch) return;
-      $("read-text").textContent = text;
-      $("reader-title").textContent = encoded ? "Decoded, not private." : "Just between you.";
-      $("reader-meta").textContent = encoded ? "Encoding only \xB7 no key required" : "Decrypted here \xB7 authentication checked";
+      $("read-text").textContent = texts.join("\n\n");
+      $("reader-title").textContent = texts.length > 1 ? `${texts.length} messages opened.` : encrypted ? "Just between you." : "Decoded, not private.";
+      $("reader-meta").textContent = encrypted ? "Decrypted here \xB7 each message authenticated" : "Encoding only \xB7 no key required";
       $("reply").hidden = false;
       lastWire = wire;
       pendingWire = "";
-      status(encoded ? "Anyone with this encoding can read the message." : "Plaintext stays inside this keyboard.");
+      status(encrypted ? "Plaintext stays inside this keyboard." : "Anyone with this encoding can read the message.");
       touch();
     } catch (error) {
       if (current === epoch) {
@@ -322,6 +461,10 @@
     pendingWire = "";
     lastWire = "";
     plainMode = false;
+    shift = 0;
+    emojiOpen = false;
+    symbols = false;
+    symbolAlt = false;
     $("shared-key").value = "";
     $("show-key").checked = false;
     $("shared-key").type = "password";
@@ -330,22 +473,35 @@
     renderDraft();
     setBusy(false);
     show("compose");
+    keys();
     updateMode();
     status(message);
     request("lock").catch(() => {
     });
   }
   function keys() {
-    const rows = symbols ? ["1234567890", "@#$%&*-+=", ".,?!:;/()"] : ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
+    const rows = emojiOpen ? [
+      ["\u{1F600}", "\u{1F603}", "\u{1F604}", "\u{1F601}", "\u{1F605}", "\u{1F602}", "\u{1F642}", "\u{1F643}"],
+      ["\u2764\uFE0F", "\u{1F60D}", "\u{1F622}", "\u{1F62D}", "\u{1F60E}", "\u{1F914}", "\u{1F440}", "\u{1F525}"],
+      ["\u{1F44D}", "\u{1F44E}", "\u{1F64F}", "\u{1F389}", "\u{1F510}", "\u{1F331}", "\u2728", "\u{1F4AC}"]
+    ] : symbols ? symbolAlt ? ["~`|\u2022\u221A\u03C0\xF7\xD7\xA3\u20AC", "\xA9\xAE\u2122\u2713[]{}\\^", `_:;"'!?`] : ["1234567890", "@#$%&*-+=", ".,?!:;/()"] : ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
     $("key-area").replaceChildren();
     rows.forEach((row, index) => {
       const line = document.createElement("div");
       line.className = "key-row" + (index === 1 ? " inset" : "");
-      if (index === 2) line.append(key("\u21E7", "Shift", () => {
-        shift = !shift;
+      if (index === 2 && symbols) line.append(key(symbolAlt ? "123" : "#+=", "More symbols", () => {
+        symbolAlt = !symbolAlt;
         keys();
-      }, "wide"));
-      for (const c of row) line.append(key(shift && !symbols ? c.toUpperCase() : c, c, () => type(shift && !symbols ? c.toUpperCase() : c)));
+      }, "wide small"));
+      else if (index === 2 && !emojiOpen) {
+        const button = key(shift === 2 ? "\u21EA" : "\u21E7", shift === 2 ? "Caps lock on" : "Shift", () => {
+          shift = (shift + 1) % 3;
+          keys();
+        }, "wide shift" + (shift ? " selected" : ""));
+        button.setAttribute("aria-pressed", String(shift > 0));
+        line.append(button);
+      }
+      for (const c of row) line.append(key(shift && !symbols && !emojiOpen ? c.toUpperCase() : c, c, () => type(shift && !symbols && !emojiOpen ? c.toUpperCase() : c), emojiOpen ? "emoji" : ""));
       if (index === 2) line.append(key("\u232B", "Backspace", backspace, "wide"));
       $("key-area").append(line);
     });
@@ -353,11 +509,19 @@
     bottom.className = "key-row";
     bottom.append(key(symbols ? "ABC" : "123", "Numbers and symbols", () => {
       symbols = !symbols;
+      symbolAlt = false;
+      emojiOpen = false;
       keys();
     }, "wide small"));
     bottom.append(key(language === "en" ? "\u09AC\u09BE\u0982\u09B2\u09BE" : "EN", "Change typing language", () => {
       rawDraft = $("draft").value;
       language = language === "en" ? "bn" : "en";
+      keys();
+    }, "wide small"));
+    bottom.append(key(emojiOpen ? "ABC" : "\u263A", "Emoji keyboard", () => {
+      emojiOpen = !emojiOpen;
+      symbols = false;
+      symbolAlt = false;
       keys();
     }, "wide small"));
     bottom.append(key("space", "Space", () => type(" "), "space"));
@@ -378,14 +542,23 @@
   }
   function type(value) {
     if (busy) return;
+    const oneShot = shift === 1 && /^[A-Z]$/.test(value) && !symbols && !emojiOpen;
+    const finishShift = () => {
+      if (oneShot) {
+        shift = 0;
+        keys();
+      }
+    };
     if (panel === "settings") {
       const field = $("shared-key"), start = field.selectionStart ?? field.value.length, end = field.selectionEnd ?? start;
       field.value = field.value.slice(0, start) + value + field.value.slice(end);
       field.setSelectionRange(start + value.length, start + value.length);
+      finishShift();
       return;
     }
     if (plainMode) {
       request("plain", { text: value }).catch((e) => status(e.message, true));
+      finishShift();
       return;
     }
     if (utf82.encode(rawDraft + value).length > MAX_BYTES) {
@@ -401,6 +574,7 @@
       renderDraft();
       field.setSelectionRange(start + value.length, start + value.length);
     }
+    finishShift();
   }
   function backspace() {
     if (busy) return;
@@ -410,7 +584,8 @@
     }
     const field = panel === "settings" ? $("shared-key") : $("draft");
     if (panel !== "settings" && language === "bn") {
-      rawDraft = [...rawDraft].slice(0, -1).join("");
+      const segments = [...new Intl.Segmenter(void 0, { granularity: "grapheme" }).segment(rawDraft)];
+      rawDraft = rawDraft.slice(0, segments.at(-1)?.index ?? 0);
       renderDraft();
       return;
     }
@@ -435,14 +610,27 @@
     }
   });
   $("encrypt").onclick = insert;
-  $("settings").onclick = $("mode-pill").onclick = () => {
-    if (busy) return;
-    $("shared-key").value = secret;
-    show("settings");
+  $("settings").onclick = () => {
+    if (!busy) openSettings();
   };
-  $("compose-tab").onclick = () => {
-    clearReader();
-    show("compose");
+  $("mode-pill").onclick = () => {
+    if (!busy) openModes("compose");
+  };
+  $("method-picker").onclick = () => openModes("settings");
+  $("close-modes").onclick = () => show(modeReturn);
+  $("shared-key").addEventListener("focus", () => {
+    if (panel !== "settings") return;
+    settingsKeypad = true;
+    show("settings");
+    requestAnimationFrame(() => {
+      const container = $("settings-panel"), field = $("shared-key");
+      container.scrollTop += field.getBoundingClientRect().top - container.getBoundingClientRect().top - 25;
+    });
+  });
+  $("keypad-done").onclick = () => {
+    $("shared-key").blur();
+    settingsKeypad = false;
+    show("settings");
   };
   $("close-settings").onclick = () => {
     $("shared-key").value = "";
@@ -454,6 +642,7 @@
     plainMode = false;
     method = "secure";
     $("method").value = "secure";
+    methodChanged();
     updateMode();
     show("compose");
   };
@@ -469,11 +658,59 @@
     updateMode();
     status(plainMode ? "Normal typing is visible to the app. Private drafts stay in Private mode." : "Your words stay here until you encrypt.");
   };
-  $("method").onchange = () => {
-    const secure = $("method").value === "secure";
-    $("key-settings").hidden = !secure;
-    $("method-help").textContent = secure ? "Authenticated encryption. Both people need the same key." : $("method").value === "morse" ? "Not private. English letters are decoded in UPPERCASE. Bangla is not supported by Morse." : "Not private. Anyone can decode this, without a key.";
+  $("paste-draft").onclick = async () => {
+    if (busy || plainMode) return;
+    if (rawDraft) {
+      status("Encrypt or clear your current draft before pasting another message.", true);
+      return;
+    }
+    const current = epoch;
+    try {
+      const copied = (await request("clipboard")).trim();
+      if (current !== epoch) return;
+      for (const item of parseMessages(copied)) item.startsWith("GK1.") ? parseEnvelope(item) : decode(item);
+      checkText(copied);
+      rawDraft = copied;
+      language = "en";
+      emojiOpen = false;
+      symbols = false;
+      symbolAlt = false;
+      shift = 0;
+      keys();
+      renderDraft();
+      status("Ciphertext is in your private draft. Encrypt & insert to add a layer.");
+    } catch (error) {
+      if (current === epoch) status(error.message, true);
+    }
   };
+  for (const [value, label, detail] of MODES) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "mode-option";
+    button.dataset.mode = value;
+    button.setAttribute("aria-label", label);
+    button.setAttribute("aria-pressed", "false");
+    const title = document.createElement("strong");
+    title.textContent = label;
+    const subtitle = document.createElement("span");
+    subtitle.textContent = detail;
+    button.append(title, subtitle);
+    $("mode-options").append(button);
+    button.onclick = async () => {
+      $("method").value = value;
+      methodChanged();
+      if (modeReturn === "compose" && (value !== "secure" || secret)) {
+        method = value;
+        updateMode();
+        show("compose");
+        try {
+          await request("autoRead", { enabled: autoRead, method });
+        } catch (error) {
+          status(error.message, true);
+        }
+      } else show("settings");
+    };
+  }
   $("generate").onclick = async () => {
     const current = epoch;
     try {
@@ -537,6 +774,7 @@
       $("show-key").checked = false;
       $("shared-key").type = "password";
       plainMode = false;
+      methodChanged();
       updateMode();
       show("compose");
       touch();
@@ -574,19 +812,23 @@
     $("forget-key").hidden = true;
     window.addEventListener("message", (e) => {
       if (e.origin !== window.location.origin || e.source !== window.parent || e.data?.source !== "gachlagan-preview") return;
-      if (e.data.op === "clipboard") read(e.data.text, true);
+      if (e.data.op === "clipboard") {
+        window.gachlaganPreviewClipboard = e.data.text;
+        read(e.data.text, true);
+      }
     });
   }
   keys();
+  methodChanged();
   updateMode();
   touch();
   if (native) request("loadSettings").then((settings) => {
-    if (!settings || !["secure", "binary", "hex", "octal", "base64", "morse"].includes(settings.method)) return;
+    if (!settings || !["secure", ...ENCODING_MODES].includes(settings.method)) return;
     method = settings.method;
     autoRead = Boolean(settings.autoRead);
     $("method").value = method;
     $("auto-read").checked = autoRead;
-    $("method").onchange();
+    methodChanged();
     updateMode();
   }).catch(() => status("Settings unavailable. Private mode remains selected."));
 })();
