@@ -6,8 +6,8 @@ This is an implemented security feature under test, not a certification or a pro
 
 1. Both people manually enter the same shared secret. Prefer a generated, random 256-bit key; exchange it in person or through an independently trusted channel.
 2. Compose in the keyboard’s visible **Private draft**. Plaintext is never inserted into the messaging app during private composition. Avro is processed locally.
-3. **Encrypt & insert** places only a GK1 ciphertext envelope into the current editor. The messaging app sends it using its normal Send button.
-4. Copy a received GK1 message. Automatic reading is enabled by default and, while the keyboard is visible, a recognized clipboard event opens it directly in the full keyboard reader. A saved key is loaded from protected device storage automatically; without one, enter the shared key once. A toolbar **Read copied message** button is available when OS restrictions prevent automatic reading.
+3. **Encrypt & insert** places a length-framed GK1 ciphertext envelope into the current editor. The messaging app sends it using its normal Send button. Several inserts can sit together in one editor.
+4. Copy one complete framed message, or several adjacent framed inserts. Automatic reading is enabled by default and, while the keyboard is visible, a recognized clipboard event opens them directly in the reader. A saved key is loaded from protected device storage automatically; without one, enter the shared key once. A toolbar **Read copied message** button is available when OS restrictions prevent automatic reading.
 5. **Private reply** clears the reader and opens the composer. There is intentionally no action that copies decrypted plaintext into the clipboard or chat.
 
 Typing plaintext into an app first and encrypting it afterward cannot stop that app from having observed the original text. Normal typing is explicitly marked as visible to the app. This build does not crawl or replace an arbitrary app’s entire draft: iOS provides limited text context, and destructive replacement can lose user text.
@@ -28,11 +28,19 @@ Implementations: Web Crypto (preview), Android JCA (`Cipher`, `SecretKeyFactory`
 
 AES-GCM is a standard authenticated-encryption choice. Argon2id is usually preferable for human passwords when suitable memory is available; it is not silently substituted here. PBKDF2 is used for portable platform-native execution in constrained keyboard extensions, at the OWASP-listed SHA256 work factor. Random shared keys are the recommended security path and do not depend on human-password strength. This is a deliberate portability tradeoff, not a claim that one algorithm is universally “best.”
 
+The encryption and decryption path has **no Internet or server dependency**. Random generated keys use HKDF-SHA256 followed by platform AES-GCM and are fast. Custom passphrases deliberately run 600,000 PBKDF2-HMAC-SHA256 iterations **for each new message salt**, on both encryption and decryption. Reducing that cost just to improve perceived speed would make offline password guessing easier. A long, randomly generated shared key is the supported fast path; devices and very long batches may still take time. There is no guarantee of instantaneous response.
+
+## Framing and multiple inserts
+
+New inserts use an ASCII wrapper: `[[GK2:<character-count>]]<GK1 envelope>[[/GK2]]` for private messages, or `[[GE2:<character-count>]]<GE1 envelope>[[/GE2]]` for public encodings. The count is the UTF-16 string length of the inner wire text. A copied selection may hold up to 16 adjacent frames, optionally separated by whitespace, within the 40,000-character clipboard limit; nested reading also stops after 16 total inner messages. An incomplete frame, damaged tail, unrecognized content between frames, or any failed authentication rejects the entire copied batch without displaying partial plaintext. Standalone GK1/GE1 messages from earlier builds remain readable.
+
+A user can copy a framed encrypted message, tap **Paste** in the private composer, and encrypt that text again (subject to the 4,096-byte draft limit). The reader unwraps at most three nested layers. This is still shared-key encryption, not a ratchet: framing is **not authenticated as a conversation transcript**. An attacker can remove, reorder, or replay whole valid frames, even though they cannot change an individual GK1 plaintext without its key. Copy the complete selection and inspect the order yourself.
+
 ## Public encodings: GE1
 
-`GE1.<binary|octal|hex|base64|morse>.<encoded-text>`
+`GE1.<mode>.<encoded-text>`
 
-These provide **no secrecy or authentication** and require no key. UTF-8 byte encodings round-trip Bangla and emoji. Morse supports its documented English alphabet and common punctuation, converts letters to uppercase, and rejects unsupported characters rather than silently losing Bangla. Hashes are not offered as reversible message modes. A “custom key” changes the shared secret, not the cryptographic algorithm; arbitrary executable encryption code is not accepted.
+The public modes are binary, octal, decimal, hexadecimal, Base32, Base64url, standard Base64, percent-encoded UTF-8, ROT13, and Morse. They provide **no secrecy or authentication** and require no key. UTF-8 byte encodings round-trip Bangla and emoji. ROT13 changes only Latin letters, leaving Bangla and emoji unchanged. Morse supports its documented English alphabet and common punctuation, converts letters to uppercase, and rejects unsupported characters rather than silently losing Bangla. Hashes are not offered as reversible message modes. A “custom key” changes the shared secret, not the cryptographic algorithm; arbitrary executable encryption code is not accepted. The UI intentionally offers one vetted private cipher suite rather than numerous weaker or incompatible choices.
 
 The version markers allow automatic recognition. Arbitrary unmarked binary from another converter is not automatically interpreted as a secret message; this avoids reading unrelated clipboard content as messages.
 
@@ -48,7 +56,7 @@ The version markers allow automatic recognition. Arbitrary unmarked binary from 
 
 ## Clipboard and network boundaries
 
-Android’s default IME can access the clipboard subject to OS behavior. Automatic reads are on by default but can be turned off in Settings; they are limited to the visible keyboard, recognized GK1/GE1 text, and bounded sizes. Clipboard history is not retained. URI clipboard data is not opened. Clipboard keys are read only through an explicit Paste key action; saved device keys can be loaded automatically for recognized encrypted messages.
+Android’s default IME can access the clipboard subject to OS behavior. Automatic reads are on by default but can be turned off in Settings; they are limited to the visible keyboard, recognized framed or legacy GK1/GE1 text, and bounded sizes. Clipboard history is not retained. URI clipboard data is not opened. Clipboard keys are read only through an explicit Paste key action; saved device keys can be loaded automatically for recognized encrypted messages.
 
 iOS clipboard access may require Full Access and system paste approval. Extensions cannot execute continuously in the background; copying while the extension is absent cannot immediately display a reader. Opening the keyboard allows the next attempt. The OS may still require tapping Read copied message. No permission bypass is attempted.
 
