@@ -10,20 +10,20 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
-import com.keyman.engine.BaseActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     setTheme(R.style.AppTheme);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    setupEdgeToEdge(R.id.constraintLayout);
-    setupStatusBarColors(    // Inset colors for Android API < 35
-      android.R.color.black, // Color for status bar on top
-      android.R.color.white  // Color for navigation bar on bottom
-    );
+    androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.constraintLayout), (view, insets) -> {
+      androidx.core.graphics.Insets bars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars());
+      view.setPadding(bars.left + 24, bars.top + 24, bars.right + 24, bars.bottom + 24);
+      return insets;
+    });
 
     Button button1 = (Button) findViewById(R.id.button1);
     button1.setOnClickListener(new View.OnClickListener() {

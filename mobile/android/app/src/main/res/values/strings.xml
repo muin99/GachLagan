@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Gachlagan Keyboard</string>
-    <string name="ime_name">Gachlagan — বাংলা অভ্র</string>
-    <string name="description">Type Bangla anywhere with offline Avro Phonetic. First enable Gachlagan Keyboard, then select it as your input method.</string>
+    <string name="ime_name">Gachlagan — Private &amp; বাংলা অভ্র</string>
+    <string name="description">Your words. Your key.\n\nEnable Gachlagan, then select it as your keyboard. Open the keyboard’s settings to set a shared key.\n\nWrite in the visible Private draft and tap Encrypt &amp; insert. Copy a received encrypted message to read it inside the keyboard.\n\nEverything happens on this device. Binary, hex, octal, Base64 and Morse are public encodings, not private encryption. Share encryption keys in person. There is no key recovery.</string>
     <string name="open_settings">1. Enable keyboard</string>
     <string name="open_picker">2. Select keyboard</string>
     <string name="action_settings">Settings</string>
