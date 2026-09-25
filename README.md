@@ -2,7 +2,7 @@
 
 An offline Android keyboard and iOS keyboard extension with a **visible private draft**, one-tap encryption, Bangla Avro Phonetic, emoji, and an in-keyboard message reader. There are no accounts, encryption servers, analytics, or online key services.
 
-**Release status:** `0.2.0-rc.1` is a source release candidate, **not a security-certified or production-approved release**. Android debug and unsigned release builds can be produced locally. iOS still needs a full Xcode/device run. Physical-device, real-app, and independent security review remain outstanding; see [verified results](docs/PROGRESS.md) and [security limits](docs/SECURITY.md) before using it for sensitive messages.
+**Release status:** `0.2.0-rc.1` is a source release candidate, **not a security-certified or production-approved release**. CI builds Android and the iOS simulator, but there is no signed public app download yet. Physical-device, real-app, and independent security review remain outstanding; see [downloads for regular users](#download-for-regular-users), [verified results](docs/PROGRESS.md), and [security limits](docs/SECURITY.md) before using it for sensitive messages.
 
 ![Private composer and reader design](design/preview-desktop.png)
 
@@ -74,7 +74,16 @@ The internal project name is inherited from the original starter; the product is
 
 The active targets no longer link or embed the legacy Keyman engine, Sentry, Reachability, DeviceKit, or ZIPFoundation. Carthage/bootstrap-ios is only for the historical baseline and is not needed for this branch. The extension uses bundled Avro, WebKit, CryptoKit/CommonCrypto, and device-only Keychain storage.
 
-## GitHub release instructions
+## Releases and downloads
+
+### Download for regular users
+
+**No installable public build is available yet.** The GitHub tag's “Source code” ZIP is for developers; it is not an Android or iPhone app. Do not use a debug build for private messages.
+
+- **Android:** [Check GitHub Releases for the signed APK](https://github.com/muin99/GachLagan/releases). When one is published, open its release page on your phone and tap the `.apk` file under **Assets**, not the source-code ZIP. Install it, then open Gachlagan Keyboard and follow the prompts to enable and select the keyboard. Download only from this official repository, not a mirror. **There is no signed APK there today.**
+- **iPhone/iPad:** There is **no TestFlight or App Store download link yet**. The keyboard must be installed as part of its iOS app; the GitHub source archive is not installable on an iPhone. This section will link to the official TestFlight or App Store listing when one exists.
+
+### Publishing checklist
 
 This repository contains **source and build instructions**, not a signed public binary. Do not attach the debug APK, an unsigned APK, private signing keys, or a test-key-configured build to a GitHub Release.
 
@@ -83,14 +92,14 @@ This repository contains **source and build instructions**, not a signed public 
 1. Run the [verification commands](#verification) and the remaining [release gates](docs/SECURITY.md#release-gates-still-requiring-real-validation). Increase `versionCode` for every published update and keep `versionName` in sync with the Git tag.
 2. In Android Studio, open `mobile/android`, choose **Build → Generate Signed Bundle / APK**, and sign the **release** variant with a private key you control. Choose APK for GitHub sideloading or Android App Bundle for Google Play. Back up the signing key securely; losing it can prevent compatible updates.
 3. Install that signed APK on physical Android devices; confirm keyboard setup, ciphertext-only insertion, multi-frame copying, key storage, clipboard behavior, and host-app compatibility. Verify that the final merged manifest has no INTERNET permission and the release app is not debuggable.
-4. Compute and publish a SHA-256 checksum alongside the signed APK, release notes, supported Android versions, and the exact source Git tag. Keep signing credentials out of this repository and CI logs. [Android’s signing guide](https://developer.android.com/studio/publish/app-signing) explains the supported signing flows.
+4. Attach the signed APK to a GitHub Release and publish its SHA-256 checksum alongside release notes, supported Android versions, and the exact source Git tag. Then replace the Android directory link above with a direct link to that verified APK asset. Keep signing credentials out of this repository and CI logs. [Android’s signing guide](https://developer.android.com/studio/publish/app-signing) explains the supported signing flows.
 
 ### iOS release
 
-1. Use full Xcode on macOS. Run `npm ci && npm run build:secure`, open `mobile/ios/KMSample2.xcodeproj`, select your Apple development team for the containing app and keyboard extension, and set unique bundle identifiers and matching capabilities. This checkout has **not** been fully built or tested with Xcode.
+1. Use full Xcode on macOS. Run `npm ci && npm run build:secure`, open `mobile/ios/KMSample2.xcodeproj`, select your Apple development team for the containing app and keyboard extension, and set unique bundle identifiers and matching capabilities. CI builds the iOS simulator target, but has **not** tested the app on a device.
 2. Build and test on real iPhones/iPads, including copy/paste permissions and Full Access, app switching, password fields, key recovery, multiline editors, and multiple host apps. Full Access grants the extension additional OS capabilities, but this app makes no network calls; explain that distinction to users.
 3. Archive the containing app in Xcode and distribute through TestFlight or the App Store after signing and review. A source checkout on GitHub is buildable by developers with their own signing setup; an unsigned IPA is not a generally installable iPhone release. [Apple’s distribution guide](https://developer.apple.com/documentation/xcode/distributing-your-app-for-beta-testing-and-releases) covers archives and TestFlight/App Store delivery.
-4. Link the TestFlight/App Store listing, release notes, supported iOS versions, and exact source Git tag from the GitHub Release. Never publish provisioning profiles, certificates, or private keys.
+4. Replace the iPhone/iPad notice above with the live TestFlight/App Store listing, and link it with release notes, supported iOS versions, and the exact source Git tag from the GitHub Release. Never publish provisioning profiles, certificates, or private keys.
 
 Do not describe a GitHub tag or successful automated tests as proof that the keyboard is secure in all messaging apps. Publish as a **pre-release** until the device, host-app, and independent review gates are complete.
 
@@ -118,4 +127,4 @@ Android E2E installs the debug app and temporarily changes the emulator’s keyb
 - `docs/SECURITY.md`: protocol, threat model, sources, and release gates.
 - `docs/PROGRESS.md`: verified results and unfinished work.
 
-`main` preserves the first Avro milestone (`fca525a`). Encryption work is on `feature/offline-encrypted-keyboard`. See `git log --oneline --decorate --all`. Nothing has been pushed, signed for public distribution, or published from this workspace.
+`main` includes the merged offline encrypted keyboard and its CI build fix. Earlier milestones remain in Git history; see `git log --oneline --decorate --all`. The source has been pushed, but no signed app has been published for regular users.
