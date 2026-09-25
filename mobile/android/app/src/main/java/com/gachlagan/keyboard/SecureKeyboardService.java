@@ -155,8 +155,13 @@ public final class SecureKeyboardService extends InputMethodService {
         case "backspace": {
           InputConnection connection = getCurrentInputConnection();
           if (connection != null) {
-            CharSequence before = connection.getTextBeforeCursor(64, 0);
-            if (before != null && before.length() > 0) {
+            CharSequence selected = connection.getSelectedText(0);
+            if (selected != null && selected.length() > 0) {
+              // commitText replaces the active editor selection atomically.
+              connection.commitText("", 1);
+            } else {
+              CharSequence before = connection.getTextBeforeCursor(64, 0);
+              if (before == null || before.length() == 0) break;
               android.icu.text.BreakIterator iterator = android.icu.text.BreakIterator.getCharacterInstance();
               iterator.setText(before.toString()); int start = iterator.preceding(before.length());
               int count = Character.codePointCount(before, Math.max(0, start), before.length());

@@ -502,7 +502,7 @@
         line.append(button);
       }
       for (const c of row) line.append(key(shift && !symbols && !emojiOpen ? c.toUpperCase() : c, c, () => type(shift && !symbols && !emojiOpen ? c.toUpperCase() : c), emojiOpen ? "emoji" : ""));
-      if (index === 2) line.append(key("\u232B", "Backspace", backspace, "wide"));
+      if (index === 2) line.append(key("\u232B", "Backspace", backspace, "wide", true));
       $("key-area").append(line);
     });
     const bottom = document.createElement("div");
@@ -528,15 +528,47 @@
     bottom.append(key("\u21B5", "New line", () => type("\n"), "wide return"));
     $("key-area").append(bottom);
   }
-  function key(label, name, action, extra = "") {
+  function key(label, name, action, extra = "", repeats = false) {
     const button = document.createElement("button");
     button.className = `key ${extra}`;
     button.textContent = label;
     button.setAttribute("aria-label", name);
-    button.addEventListener("pointerdown", (e) => e.preventDefault());
-    button.addEventListener("click", () => {
+    if (!repeats) {
+      button.addEventListener("pointerdown", (e) => e.preventDefault());
+      button.addEventListener("click", () => {
+        touch();
+        action();
+      });
+      return button;
+    }
+    let delay, interval, handledPointer = false;
+    const stop = () => {
+      clearTimeout(delay);
+      clearInterval(interval);
+    };
+    button.addEventListener("pointerdown", (e) => {
+      if (e.button !== 0 || handledPointer) return;
+      e.preventDefault();
+      handledPointer = true;
+      button.setPointerCapture?.(e.pointerId);
       touch();
       action();
+      delay = setTimeout(() => {
+        action();
+        interval = setInterval(action, 55);
+      }, 360);
+    });
+    for (const event of ["pointerup", "pointercancel", "lostpointercapture"]) button.addEventListener(event, () => {
+      stop();
+      queueMicrotask(() => {
+        handledPointer = false;
+      });
+    });
+    button.addEventListener("click", (e) => {
+      if (!handledPointer && e.detail === 0) {
+        touch();
+        action();
+      }
     });
     return button;
   }
@@ -583,13 +615,19 @@
       return;
     }
     const field = panel === "settings" ? $("shared-key") : $("draft");
+    let start = field.selectionStart ?? field.value.length, end = field.selectionEnd ?? start;
+    if (start !== end) {
+      field.value = field.value.slice(0, start) + field.value.slice(end);
+      field.setSelectionRange(start, start);
+      if (panel !== "settings") rawDraft = field.value;
+      return;
+    }
     if (panel !== "settings" && language === "bn") {
       const segments = [...new Intl.Segmenter(void 0, { granularity: "grapheme" }).segment(rawDraft)];
       rawDraft = rawDraft.slice(0, segments.at(-1)?.index ?? 0);
       renderDraft();
       return;
     }
-    let start = field.selectionStart ?? field.value.length, end = field.selectionEnd ?? start;
     if (start === end && start > 0) {
       const segments = [...new Intl.Segmenter(void 0, { granularity: "grapheme" }).segment(field.value.slice(0, start))];
       start = segments.at(-1)?.index ?? 0;

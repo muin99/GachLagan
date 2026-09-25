@@ -168,6 +168,47 @@ test('Avro keys produce a visible Bangla draft; backspace edits the phonetic tok
   await expect(page.locator('#draft')).toHaveValue('আমি');
   await page.getByRole('button', { name: 'Backspace', exact: true }).click(); await expect(page.locator('#draft')).toHaveValue('আম');
 });
+test('backspace removes a selection and repeats while held', async ({ page }) => {
+  await page.goto('/secure/index.html');
+  const draft = page.locator('#draft'), erase = page.getByRole('button', { name: 'Backspace', exact: true });
+  await draft.fill('select all of this');
+  await draft.evaluate(field => field.select());
+  await erase.click();
+  await expect(draft).toHaveValue('');
+
+  await draft.fill('hold-to-delete');
+  const box = await erase.boundingBox();
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.waitForTimeout(700);
+  await page.mouse.up();
+  expect((await draft.inputValue()).length).toBeLessThan('hold-to-delete'.length - 2);
+
+  await draft.fill('');
+  await page.getByRole('button', { name: 'Change typing language' }).click();
+  for (const key of ['a', 'm', 'i']) await page.getByRole('button', { name: key, exact: true }).click();
+  await expect(draft).toHaveValue('আমি');
+  await draft.evaluate(field => field.select());
+  await erase.click();
+  await expect(draft).toHaveValue('');
+});
+test('normal typing backspace removes the host app selection and repeats while held', async ({ page }) => {
+  await page.goto('/');
+  const keyboard = page.frameLocator('#sender'), host = page.locator('#sender-host');
+  await keyboard.locator('#plain-mode').click();
+  await host.evaluate(field => { field.value = 'selected host text'; field.select(); });
+  const erase = keyboard.getByRole('button', { name: 'Backspace', exact: true });
+  await erase.click();
+  await expect(host).toHaveValue('');
+
+  await host.evaluate(field => { field.value = 'repeat in host'; field.setSelectionRange(field.value.length, field.value.length); });
+  const box = await erase.boundingBox();
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.waitForTimeout(700);
+  await page.mouse.up();
+  expect((await host.inputValue()).length).toBeLessThan('repeat in host'.length - 2);
+});
 test('locking and inactivity clear private drafts and keys; in-flight encryption cannot insert', async ({ page }) => {
   await page.goto('/'); const sender = page.frameLocator('#sender'); await configure(sender);
   await sender.locator('#draft').fill('erase me'); await sender.locator('#lock').click(); await expect(sender.locator('#draft')).toHaveValue('');

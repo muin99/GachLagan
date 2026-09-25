@@ -9,8 +9,13 @@ window.addEventListener('message', event => {
   const host = document.getElementById(side + '-host');
   if (event.data.op === 'insert' || event.data.op === 'plain') host.value += event.data.text;
   else if (event.data.op === 'backspace') {
-    const last = [...new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(host.value)].at(-1);
-    host.value = host.value.slice(0, last?.index ?? 0);
+    let start = host.selectionStart ?? host.value.length, end = host.selectionEnd ?? start;
+    if (start === end && start > 0) {
+      const last = [...new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(host.value.slice(0, start))].at(-1);
+      start = last?.index ?? 0;
+    }
+    host.value = host.value.slice(0, start) + host.value.slice(end);
+    host.setSelectionRange(start, start);
   }
 });
 function send(side) {
