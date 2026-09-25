@@ -1,8 +1,6 @@
 # Work log
 
-Branch: `feature/offline-encrypted-keyboard`. Baseline: `fca525a` on `main`.
-
-Current source candidate: `0.2.0-rc.1`. No signed public release or GitHub remote exists in this workspace.
+Current candidate: `0.2.0-rc.2`, prepared on `release/v0.2.0-rc.2` for a signed Android public preview. Source and CI are hosted at `muin99/GachLagan`. Artifact-specific verification is recorded in the GitHub Release.
 
 ## Implemented in this branch
 
@@ -45,16 +43,17 @@ crypto test runs on macOS, not inside an iOS keyboard extension.
 - Async results cannot restore keys or insert a message after session locking.
 - A public demo key exists only in the design/test harnesses, not as a native
   keyboard default. Native encryption requires user setup.
-- CI definitions for shared tests, Android builds, and Apple interop/iOS
-  compilation are checked in. They have **not** run on a remote CI service;
-  adding a workflow is not evidence that its iOS build passes.
+- GitHub CI now passes shared tests, Android builds, and Apple interop/iOS
+  simulator compilation. Commit `8822ac0` fixed the removed Android SDK tools
+  package and the inherited Swift 4.0 language mode.
 
 ## Release status
 
-The README now contains GitHub release steps for signed Android APKs and
-iOS TestFlight/App Store delivery. The available Xcode Command Line Tools can
-parse Swift and validate project plists, but full Xcode is absent here, so
-the iOS target has not been compiled or run in a simulator/device.
+Android packaging uses a persistent release key outside Git, with its password
+in macOS Keychain. The release script builds, checks, signs and fingerprints
+the APK. A separate emulator test host exercises the signed production variant.
+Full Xcode is absent locally; GitHub's macOS runner compiles the iOS simulator
+target successfully. No iPhone distribution is configured.
 
 Not approved for production release. Full iOS Xcode/device testing, physical
 Android device and real messaging-app testing, independent security review,
@@ -71,6 +70,6 @@ identity authentication; detailed limits are in SECURITY.md.
 - Subsequent commits record dependency cleanup, regression tests, and this
   handoff. Use `git log --oneline --decorate --all` for exact IDs.
 
-No remote has been configured and nothing has been pushed, signed for public
-distribution, or published. Screenshots are versioned; APK build artifacts are
-ignored by Git and reproducible from the checked-in source.
+Sources are pushed to GitHub. Screenshots are versioned; release APKs and
+checksums are distributed as GitHub Release assets, not committed binaries.
+See RELEASING.md for signing identity preservation and artifact provenance.

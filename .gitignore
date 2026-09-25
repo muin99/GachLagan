@@ -4,6 +4,11 @@ dist/
 test-results/
 playwright-report/
 artifacts/
+*.jks
+*.keystore
+*.p12
+*.p8
+*.mobileprovision
 Carthage/
 mobile/android/.gradle/
 mobile/android/local.properties

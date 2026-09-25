@@ -1,1 +1,3 @@
 include ':app'
+// Separate emulator test host; never a dependency of the public keyboard APK.
+include ':releaseHost'

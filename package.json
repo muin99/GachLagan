@@ -1,6 +1,6 @@
 {
   "name": "gachlagan-keyboard",
-  "version": "0.2.0",
+  "version": "0.2.0-rc.2",
   "private": true,
   "description": "Offline cross-platform Bangla system keyboard with Avro Phonetic support",
   "license": "MIT",
@@ -13,6 +13,7 @@
     "test:e2e": "playwright test",
     "test:interop": "node scripts/test-interop.mjs",
     "test:android": "node scripts/test-android.mjs",
+    "release:android": "node scripts/release-android.mjs",
     "capture:design": "node scripts/capture-design.mjs",
     "verify": "npm run test && npm run build:keyboard && npm run sync:keyboard && npm run build:secure"
   },

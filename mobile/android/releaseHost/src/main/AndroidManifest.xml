@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application android:label="GachLagan release test host" android:allowBackup="false">
+        <activity android:name="com.gachlagan.keyboard.HostTestActivity" android:exported="true" />
+    </application>
+</manifest>

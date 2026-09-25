@@ -2,7 +2,9 @@
 
 An offline Android keyboard and iOS keyboard extension with a **visible private draft**, one-tap encryption, Bangla Avro Phonetic, emoji, and an in-keyboard message reader. There are no accounts, encryption servers, analytics, or online key services.
 
-**Release status:** `0.2.0-rc.1` is a source release candidate, **not a security-certified or production-approved release**. CI builds Android and the iOS simulator, but there is no signed public app download yet. Physical-device, real-app, and independent security review remain outstanding; see [downloads for regular users](#download-for-regular-users), [verified results](docs/PROGRESS.md), and [security limits](docs/SECURITY.md) before using it for sensitive messages.
+**[Download GachLagan for Android](https://github.com/muin99/GachLagan/releases/download/v0.2.0-rc.2/GachLagan-v0.2.0-rc.2-android.apk)** · Android 8.0+ · [Release notes and checksums](https://github.com/muin99/GachLagan/releases/tag/v0.2.0-rc.2)
+
+**Release status:** `0.2.0-rc.2` is an installable Android release candidate. It is signed for consistent updates, but has not received an independent security audit or broad physical-device testing. See [installation instructions](#download-for-regular-users), [verified results](docs/PROGRESS.md), and [security limits](docs/SECURITY.md). iPhone/iPad distribution is pending an Apple Developer account and TestFlight/App Store release.
 
 ![Private composer and reader design](design/preview-desktop.png)
 
@@ -78,21 +80,32 @@ The active targets no longer link or embed the legacy Keyman engine, Sentry, Rea
 
 ### Download for regular users
 
-**No installable public build is available yet.** The GitHub tag's “Source code” ZIP is for developers; it is not an Android or iPhone app. Do not use a debug build for private messages.
+### Android — no computer or developer tools needed
 
-- **Android:** [Check GitHub Releases for the signed APK](https://github.com/muin99/GachLagan/releases). When one is published, open its release page on your phone and tap the `.apk` file under **Assets**, not the source-code ZIP. Install it, then open Gachlagan Keyboard and follow the prompts to enable and select the keyboard. Download only from this official repository, not a mirror. **There is no signed APK there today.**
-- **iPhone/iPad:** There is **no TestFlight or App Store download link yet**. The keyboard must be installed as part of its iOS app; the GitHub source archive is not installable on an iPhone. This section will link to the official TestFlight or App Store listing when one exists.
+1. On your Android phone, tap **[Download the Android app](https://github.com/muin99/GachLagan/releases/download/v0.2.0-rc.2/GachLagan-v0.2.0-rc.2-android.apk)**.
+2. Open the downloaded APK. If Android asks, allow your browser to install this app, then tap **Install**. You can turn that browser permission off afterward.
+3. Open **Gachlagan Keyboard**, tap **1. Enable keyboard**, and enable it. Android displays its standard warning for third-party keyboards.
+4. Return to the app, tap **2. Select keyboard**, and select Gachlagan. Open your messaging app to start typing.
+5. Open the keyboard's gear button. Generate a shared key or enter the key agreed with your friend, then tap **Use these settings**. Follow the [everyday flow](#everyday-flow) above.
+
+Requires Android 8.0 or newer and an up-to-date Android System WebView. Download the `.apk` asset, not GitHub's “Source code” ZIP. [Release notes, checksum, and public signing certificate](https://github.com/muin99/GachLagan/releases/tag/v0.2.0-rc.2) are available for verification.
+
+Future official APKs use the same signing identity and install over this version. If you previously installed a developer/debug build, Android may require uninstalling it first because its signature differs. Preserve any shared keys you need before uninstalling; saved app data is removed and there is no account recovery.
+
+### iPhone/iPad
+
+The iOS source and simulator build are available, but there is no installable iPhone release yet. A TestFlight or App Store link will be added when Apple signing and distribution are set up. The Android APK does not work on iPhones.
 
 ### Publishing checklist
 
-This repository contains **source and build instructions**, not a signed public binary. Do not attach the debug APK, an unsigned APK, private signing keys, or a test-key-configured build to a GitHub Release.
+The Android release uses a dedicated signing identity stored outside this repository. [Maintainer release instructions](docs/RELEASING.md) describe signing, testing, publishing, and preserving that identity. Do not attach debug APKs, unsigned APKs, private signing keys, or test-key-configured builds to a GitHub Release.
 
 ### Android release
 
 1. Run the [verification commands](#verification) and the remaining [release gates](docs/SECURITY.md#release-gates-still-requiring-real-validation). Increase `versionCode` for every published update and keep `versionName` in sync with the Git tag.
 2. In Android Studio, open `mobile/android`, choose **Build → Generate Signed Bundle / APK**, and sign the **release** variant with a private key you control. Choose APK for GitHub sideloading or Android App Bundle for Google Play. Back up the signing key securely; losing it can prevent compatible updates.
 3. Install that signed APK on physical Android devices; confirm keyboard setup, ciphertext-only insertion, multi-frame copying, key storage, clipboard behavior, and host-app compatibility. Verify that the final merged manifest has no INTERNET permission and the release app is not debuggable.
-4. Attach the signed APK to a GitHub Release and publish its SHA-256 checksum alongside release notes, supported Android versions, and the exact source Git tag. Then replace the Android directory link above with a direct link to that verified APK asset. Keep signing credentials out of this repository and CI logs. [Android’s signing guide](https://developer.android.com/studio/publish/app-signing) explains the supported signing flows.
+4. Attach the signed APK to a GitHub Release and publish its SHA-256 checksum alongside release notes, supported Android versions, and the exact source Git tag. Update the direct APK link above for each release. Keep signing credentials out of this repository and CI logs. [Android’s signing guide](https://developer.android.com/studio/publish/app-signing) explains the supported signing flows.
 
 ### iOS release
 
@@ -127,4 +140,4 @@ Android E2E installs the debug app and temporarily changes the emulator’s keyb
 - `docs/SECURITY.md`: protocol, threat model, sources, and release gates.
 - `docs/PROGRESS.md`: verified results and unfinished work.
 
-`main` includes the merged offline encrypted keyboard and its CI build fix. Earlier milestones remain in Git history; see `git log --oneline --decorate --all`. The source has been pushed, but no signed app has been published for regular users.
+`main` includes the offline encrypted keyboard, CI build fixes, and Android release tooling. Earlier milestones remain in Git history; see `git log --oneline --decorate --all`. Public APKs and their matching source tags are listed in [GitHub Releases](https://github.com/muin99/GachLagan/releases).
