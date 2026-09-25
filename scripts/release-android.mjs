@@ -80,7 +80,7 @@ writeFileSync(join(output, 'SIGNING-CERTIFICATE.pem'), run('keytool', ['-exportc
 const sha256 = createHash('sha256').update(readFileSync(apk)).digest('hex');
 writeFileSync(join(output, 'release.json'), JSON.stringify({ tag, version, sourceCommit, filename, sha256,
   applicationId: 'com.gachlagan.keyboard', versionCode: Number(/versionCode='(\d+)'/.exec(badging)[1]), minAndroid: '8.0',
-  signingCertificateSHA256: fingerprint, prerelease: true }, null, 2) + '\n', { flag: 'wx' });
+  signingCertificateSHA256: fingerprint, prerelease: false }, null, 2) + '\n', { flag: 'wx' });
 const files = [filename, 'SIGNING-CERTIFICATE.pem', 'release.json'];
 writeFileSync(join(output, 'SHA256SUMS'), files.map(name => `${createHash('sha256').update(readFileSync(join(output, name))).digest('hex')}  ${name}`).join('\n') + '\n', { flag: 'wx' });
 console.log(verification);

@@ -4,7 +4,7 @@ import { native, request } from './bridge.mjs';
 const $ = id => document.getElementById(id);
 let secret = '', method = 'secure', panel = 'compose', language = 'en', shift = 0, symbols = false, symbolAlt = false, emojiOpen = false;
 let plainMode = false, busy = false, epoch = 0, rawDraft = '', pendingWire = '', lastWire = '', autoRead = true;
-let settingsKeypad = false, modeReturn = 'compose', expiry;
+let settingsKeypad = false, modeReturn = 'compose', settingsReturn = 'compose', expiry;
 const utf8 = new TextEncoder();
 const MODES = [
   ['secure', 'Private · AES-256-GCM', 'Authenticated encryption · shared key'],
@@ -24,7 +24,14 @@ function show(which) {
   $('keypad-done').hidden = !settingsKeypad;
   document.body.classList.toggle('settings-keypad', which === 'settings' && settingsKeypad);
 }
-function openSettings() { settingsKeypad = false; $('shared-key').value = secret; show('settings'); }
+function resetSettingsForm(selectedMethod = method) {
+  $('method').value = selectedMethod; $('shared-key').value = secret; $('auto-read').checked = autoRead;
+  $('show-key').checked = false; $('shared-key').type = 'password'; methodChanged();
+}
+function openSettings(returnTo = panel === 'read' ? 'read' : 'compose', selectedMethod = method) {
+  settingsReturn = returnTo; settingsKeypad = false; resetSettingsForm(selectedMethod); show('settings');
+  $('settings-panel').scrollTop = 0;
+}
 function methodChanged() {
   const selected = $('method').value, secure = selected === 'secure';
   $('method-choice').textContent = MODES.find(([value]) => value === selected)?.[1] ?? MODES[0][1];
@@ -49,7 +56,7 @@ function renderDraft() {
 function setBusy(value) { busy = value; $('encrypt').disabled = value; $('read-clipboard').disabled = value; $('read-copied').disabled = value; $('draft').readOnly = value; }
 async function insert() {
   if (busy || plainMode) return;
-  if (method === 'secure' && !secret) { show('settings'); status('Add the same shared key on both phones first.'); return; }
+  if (method === 'secure' && !secret) { openSettings('compose', 'secure'); status('Add the same shared key on both phones first.'); return; }
   const text = $('draft').value, current = epoch;
   try {
     checkText(text); setBusy(true); status(method === 'secure' ? 'Encrypting on this device…' : 'Encoding on this device…');
@@ -78,9 +85,9 @@ async function read(wire, automatic = false) {
       const saved = await request('loadKey');
       if (current !== epoch) return;
       if (saved) { checkSecret(saved); secret = saved; }
-      else { pendingWire = wire; openSettings(); status('Copied message found. Enter your shared key to read it.'); return; }
+      else { pendingWire = wire; openSettings(panel === 'read' ? 'read' : 'compose', 'secure'); status('Copied message found. Enter your shared key to read it.'); return; }
     } catch (error) {
-      if (current === epoch) { pendingWire = wire; openSettings(); status('Saved key unavailable. Enter your shared key to read it.', true); }
+      if (current === epoch) { pendingWire = wire; openSettings(panel === 'read' ? 'read' : 'compose', 'secure'); status('Saved key unavailable. Enter your shared key to read it.', true); }
       return;
     } finally { if (current === epoch) setBusy(false); }
   }
@@ -227,7 +234,7 @@ $('shared-key').addEventListener('focus', () => {
   });
 });
 $('keypad-done').onclick = () => { $('shared-key').blur(); settingsKeypad = false; show('settings'); };
-$('close-settings').onclick = () => { $('shared-key').value = ''; show('compose'); };
+$('close-settings').onclick = () => { pendingWire = ''; resetSettingsForm(); show(settingsReturn); };
 $('lock').onclick = () => lock();
 $('reply').onclick = () => { clearReader(); plainMode = false; method = 'secure'; $('method').value = 'secure'; methodChanged(); updateMode(); show('compose'); };
 $('plain-mode').onclick = () => {
@@ -261,7 +268,8 @@ for (const [value, label, detail] of MODES) {
       method = value; updateMode(); show('compose');
       try { await request('autoRead', { enabled: autoRead, method }); }
       catch (error) { status(error.message, true); }
-    } else show('settings');
+    } else if (modeReturn === 'compose') openSettings('compose', value);
+    else show('settings');
   };
 }
 $('generate').onclick = async () => { const current = epoch; try { const value = await request('generate'); if (current !== epoch) return; $('shared-key').value = value; status('New random key generated. Show it to your friend in person.'); } catch (e) { if (current === epoch) status(e.message, true); } };

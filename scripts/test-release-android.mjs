@@ -27,8 +27,8 @@ try {
   shell(['ime', 'set', ime]);
   assert.equal(shell(['settings', 'get', 'secure', 'default_input_method']), ime);
   const dump = shell(['pm', 'dump', pkg]);
-  assert.match(dump, /versionCode=3\b/);
-  assert.match(dump, /versionName=0\.2\.0-rc\.2\b/);
+  assert.match(dump, /versionCode=4\b/);
+  assert.match(dump, /versionName=2\.0\.1\b/);
   assert.match(dump, /SecureKeyboardService/);
   command(['install', '-r', apk]);
   assert.equal(shell(['settings', 'get', 'secure', 'default_input_method']), ime);

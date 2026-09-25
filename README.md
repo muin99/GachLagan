@@ -2,9 +2,9 @@
 
 An offline Android keyboard and iOS keyboard extension with a **visible private draft**, one-tap encryption, Bangla Avro Phonetic, emoji, and an in-keyboard message reader. There are no accounts, encryption servers, analytics, or online key services.
 
-**[Download GachLagan for Android](https://github.com/muin99/GachLagan/releases/download/v0.2.0-rc.2/GachLagan-v0.2.0-rc.2-android.apk)** · Android 8.0+ · [Release notes and checksums](https://github.com/muin99/GachLagan/releases/tag/v0.2.0-rc.2)
+**[Download GachLagan for Android](https://github.com/muin99/GachLagan/releases/download/v2.0.1/GachLagan-v2.0.1-android.apk)** · Android 8.0+ · [Release notes and checksums](https://github.com/muin99/GachLagan/releases/tag/v2.0.1)
 
-**Release status:** `0.2.0-rc.2` is an installable Android release candidate. It is signed for consistent updates, but has not received an independent security audit or broad physical-device testing. See [installation instructions](#download-for-regular-users), [verified results](docs/PROGRESS.md), and [security limits](docs/SECURITY.md). iPhone/iPad distribution is pending an Apple Developer account and TestFlight/App Store release.
+**Release status:** `2.0.1` is an installable Android release. It is signed for consistent updates, but has not received an independent security audit or broad physical-device testing. See [installation instructions](#download-for-regular-users), [verified results](docs/PROGRESS.md), and [security limits](docs/SECURITY.md). iPhone/iPad distribution is pending an Apple Developer account and TestFlight/App Store release.
 
 ![Private composer and reader design](design/preview-desktop.png)
 
@@ -82,13 +82,13 @@ The active targets no longer link or embed the legacy Keyman engine, Sentry, Rea
 
 ### Android — no computer or developer tools needed
 
-1. On your Android phone, tap **[Download the Android app](https://github.com/muin99/GachLagan/releases/download/v0.2.0-rc.2/GachLagan-v0.2.0-rc.2-android.apk)**.
+1. On your Android phone, tap **[Download the Android app](https://github.com/muin99/GachLagan/releases/download/v2.0.1/GachLagan-v2.0.1-android.apk)**.
 2. Open the downloaded APK. If Android asks, allow your browser to install this app, then tap **Install**. You can turn that browser permission off afterward.
 3. Open **Gachlagan Keyboard**, tap **1. Enable keyboard**, and enable it. Android displays its standard warning for third-party keyboards.
 4. Return to the app, tap **2. Select keyboard**, and select Gachlagan. Open your messaging app to start typing.
 5. Open the keyboard's gear button. Generate a shared key or enter the key agreed with your friend, then tap **Use these settings**. Follow the [everyday flow](#everyday-flow) above.
 
-Requires Android 8.0 or newer and an up-to-date Android System WebView. Download the `.apk` asset, not GitHub's “Source code” ZIP. [Release notes, checksum, and public signing certificate](https://github.com/muin99/GachLagan/releases/tag/v0.2.0-rc.2) are available for verification.
+Requires Android 8.0 or newer and an up-to-date Android System WebView. Download the `.apk` asset, not GitHub's “Source code” ZIP. [Release notes, checksum, and public signing certificate](https://github.com/muin99/GachLagan/releases/tag/v2.0.1) are available for verification.
 
 Future official APKs use the same signing identity and install over this version. If you previously installed a developer/debug build, Android may require uninstalling it first because its signature differs. Preserve any shared keys you need before uninstalling; saved app data is removed and there is no account recovery.
 

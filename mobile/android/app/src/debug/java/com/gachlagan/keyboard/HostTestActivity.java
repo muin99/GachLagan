@@ -16,6 +16,8 @@ public final class HostTestActivity extends Activity {
     EditText editor = new EditText(this); editor.setContentDescription("Host message"); editor.setHint("Only ciphertext should appear here"); editor.setTextSize(12); editor.setMaxLines(3); root.addView(editor);
     Button copy = new Button(this); copy.setText("Copy received message"); copy.setOnClickListener(v -> ((ClipboardManager)getSystemService(CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("Encrypted message", editor.getText().toString()))); root.addView(copy);
     Button clear = new Button(this); clear.setText("Clear host message"); clear.setOnClickListener(v -> editor.setText("")); root.addView(clear);
+    Button fill = new Button(this); fill.setText("Fill host message"); fill.setOnClickListener(v -> { editor.setText("hold and selection deletion"); editor.setSelection(editor.length()); }); root.addView(fill);
+    Button selectAll = new Button(this); selectAll.setText("Select all host message"); selectAll.setOnClickListener(v -> { editor.requestFocus(); editor.selectAll(); }); root.addView(selectAll);
     setContentView(root); editor.requestFocus();
   }
 }

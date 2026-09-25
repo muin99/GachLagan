@@ -260,6 +260,7 @@
   var autoRead = true;
   var settingsKeypad = false;
   var modeReturn = "compose";
+  var settingsReturn = "compose";
   var expiry;
   var utf82 = new TextEncoder();
   var MODES = [
@@ -291,10 +292,20 @@
     $("keypad-done").hidden = !settingsKeypad;
     document.body.classList.toggle("settings-keypad", which === "settings" && settingsKeypad);
   }
-  function openSettings() {
-    settingsKeypad = false;
+  function resetSettingsForm(selectedMethod = method) {
+    $("method").value = selectedMethod;
     $("shared-key").value = secret;
+    $("auto-read").checked = autoRead;
+    $("show-key").checked = false;
+    $("shared-key").type = "password";
+    methodChanged();
+  }
+  function openSettings(returnTo = panel === "read" ? "read" : "compose", selectedMethod = method) {
+    settingsReturn = returnTo;
+    settingsKeypad = false;
+    resetSettingsForm(selectedMethod);
     show("settings");
+    $("settings-panel").scrollTop = 0;
   }
   function methodChanged() {
     const selected = $("method").value, secure = selected === "secure";
@@ -332,7 +343,7 @@
   async function insert() {
     if (busy || plainMode) return;
     if (method === "secure" && !secret) {
-      show("settings");
+      openSettings("compose", "secure");
       status("Add the same shared key on both phones first.");
       return;
     }
@@ -389,14 +400,14 @@
           secret = saved;
         } else {
           pendingWire = wire;
-          openSettings();
+          openSettings(panel === "read" ? "read" : "compose", "secure");
           status("Copied message found. Enter your shared key to read it.");
           return;
         }
       } catch (error) {
         if (current === epoch) {
           pendingWire = wire;
-          openSettings();
+          openSettings(panel === "read" ? "read" : "compose", "secure");
           status("Saved key unavailable. Enter your shared key to read it.", true);
         }
         return;
@@ -671,8 +682,9 @@
     show("settings");
   };
   $("close-settings").onclick = () => {
-    $("shared-key").value = "";
-    show("compose");
+    pendingWire = "";
+    resetSettingsForm();
+    show(settingsReturn);
   };
   $("lock").onclick = () => lock();
   $("reply").onclick = () => {
@@ -746,7 +758,8 @@
         } catch (error) {
           status(error.message, true);
         }
-      } else show("settings");
+      } else if (modeReturn === "compose") openSettings("compose", value);
+      else show("settings");
     };
   }
   $("generate").onclick = async () => {

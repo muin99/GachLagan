@@ -156,6 +156,21 @@ test('settings mode picker opens within the keyboard and saves a public mode', a
   await page.locator('#save-settings').click();
   await expect(page.locator('#mode-label')).toContainText('BASE32');
 });
+test('settings and mode close buttons cancel changes and return to the prior panel', async ({ page }) => {
+  await page.goto('/secure/index.html');
+  await page.locator('#settings').click();
+  await page.locator('#method-picker').click();
+  await page.locator('[data-mode="hex"]').click();
+  await expect(page.locator('#method-choice')).toContainText('Hexadecimal');
+  await page.locator('#close-settings').click();
+  await expect(page.locator('#compose-panel')).toBeVisible();
+  await expect(page.locator('#mode-label')).toContainText('AES-256-GCM');
+  await page.locator('#settings').click();
+  await expect(page.locator('#method-choice')).toContainText('Private');
+  await page.locator('#method-picker').click();
+  await page.locator('#close-modes').click();
+  await expect(page.locator('#settings-panel')).toBeVisible();
+});
 test('Avro keys produce a visible Bangla draft; backspace edits the phonetic token', async ({ page }) => {
   await page.goto('/secure/index.html');
   await page.getByRole('button', { name: 'Change typing language' }).click();

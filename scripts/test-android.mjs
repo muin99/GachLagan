@@ -18,7 +18,8 @@ async function hostNode(label) {
     if (!node) await new Promise(resolve => setTimeout(resolve, 1000));
   }
   if (!node) throw new Error('Host test control missing: ' + label);
-  const text = /\btext="([^"]*)"/.exec(node)?.[1] ?? '';
+  let text = /\btext="([^"]*)"/.exec(node)?.[1] ?? '';
+  if (label === 'Host message' && text === 'Only ciphertext should appear here') text = '';
   const bounds = /bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"/.exec(node).slice(1).map(Number);
   return { text, x: Math.round((bounds[0] + bounds[2]) / 2), y: Math.round((bounds[1] + bounds[3]) / 2) };
 }
@@ -26,7 +27,12 @@ async function tapHost(label) { const node = await hostNode(label); await device
 await mkdir('artifacts', { recursive: true });
 try {
   console.log('Android E2E: install and start test host');
+  // A public release uses a different signing identity than the debug APK.
+  // Remove it so this test cannot silently exercise an older installed build.
+  await device.shell('pm uninstall ' + pkg).catch(() => {});
   await device.installApk(await readFile('mobile/android/app/build/outputs/apk/debug/app-debug.apk'));
+  const packageState = (await device.shell('dumpsys package ' + pkg)).toString();
+  assert.match(packageState, /DEBUGGABLE/, 'Emulator did not install the freshly built debug APK');
   await device.shell('input keyevent KEYCODE_WAKEUP'); await device.shell('wm dismiss-keyguard');
   await device.shell('settings put secure show_ime_with_hard_keyboard 1');
   await device.shell('ime enable ' + ime); await device.shell('ime set ' + ime);
@@ -39,6 +45,44 @@ try {
   page.setDefaultTimeout(20000);
   await page.locator('#settings').waitFor();
   await page.locator('#lock').click();
+  console.log('Android E2E: exercise close and cancel navigation flows');
+  await page.locator('#settings').click();
+  await expect(page.locator('#settings-panel')).toBeVisible();
+  await page.locator('#close-settings').click();
+  await expect(page.locator('#compose-panel')).toBeVisible();
+  await expect(page.locator('#key-area')).toBeVisible();
+  await page.locator('#mode-pill').click();
+  await expect(page.locator('#modes-panel')).toBeVisible();
+  await page.locator('#close-modes').click();
+  await expect(page.locator('#compose-panel')).toBeVisible();
+  await page.locator('#settings').click();
+  await page.locator('#method-picker').click();
+  await page.locator('[data-mode="hex"]').click();
+  await expect(page.locator('#settings-panel')).toBeVisible();
+  await page.locator('#close-settings').click();
+  await expect(page.locator('#mode-label')).toContainText('AES-256-GCM');
+  await page.locator('#settings').click();
+  await expect(page.locator('#method-choice')).toContainText('Private');
+  await page.locator('#shared-key').click();
+  await expect(page.locator('#key-area')).toBeVisible();
+  await page.locator('#close-settings').click();
+  await expect(page.locator('#compose-panel')).toBeVisible();
+  console.log('Android E2E: selection deletion and held backspace');
+  await tapHost('Fill host message'); await tapHost('Select all host message');
+  await page.locator('#plain-mode').click();
+  await page.getByRole('button', { name: 'Backspace', exact: true }).click();
+  await expect.poll(async () => (await hostNode('Host message')).text).toBe('');
+  await tapHost('Fill host message');
+  await page.locator('#plain-mode').click();
+  const erase = page.getByRole('button', { name: 'Backspace', exact: true });
+  const eraseBox = await erase.boundingBox();
+  await page.mouse.move(eraseBox.x + eraseBox.width / 2, eraseBox.y + eraseBox.height / 2);
+  await page.mouse.down(); await new Promise(resolve => setTimeout(resolve, 750)); await page.mouse.up();
+  assert.ok((await hostNode('Host message')).text.length < 'hold and selection deletion'.length - 2, 'Held backspace did not repeat in the host editor');
+  await tapHost('Clear host message');
+  await page.locator('#draft').fill('private selection'); await page.locator('#draft').evaluate(field => field.select());
+  await page.getByRole('button', { name: 'Backspace', exact: true }).click();
+  await expect(page.locator('#draft')).toHaveValue('');
   console.log('Android E2E: configure generated shared key');
   const errors = []; page.on('pageerror', error => errors.push(error.message));
   const key = 'GKKEY1.AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8';
@@ -107,9 +151,9 @@ try {
   await device.shell('input keyevent KEYCODE_BACK'); await tapHost('Host message');
   await expect(page.locator('#draft')).toHaveValue('');
   assert.deepEqual(errors, []);
-  console.log('Android emulator E2E passed: visible draft, Shift/emoji and grapheme deletion, in-keyboard mode chooser, adjacent framed inserts from one copy, automatic saved-key unlock, Android Keystore persistence/deletion, native Unicode passphrase interoperability, and hide-to-lock.');
+  console.log('Android emulator E2E passed: settings/mode close and cancellation, key keypad, selected and held deletion, visible draft, Shift/emoji, adjacent framed inserts, automatic saved-key unlock, Android Keystore persistence/deletion, native Unicode passphrase interoperability, and hide-to-lock.');
 } finally {
-  if (previousIme && previousIme !== 'null') await device.shell('ime set ' + previousIme);
+  if (previousIme && previousIme !== 'null' && !previousIme.startsWith(pkg + '/')) await device.shell('ime set ' + previousIme);
   if (previousHardware !== 'null') await device.shell('settings put secure show_ime_with_hard_keyboard ' + previousHardware);
   await device.close();
 }
