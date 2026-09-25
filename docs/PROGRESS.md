@@ -21,6 +21,7 @@ Current candidate: `0.2.0-rc.2`, prepared on `release/v0.2.0-rc.2` for a signed 
 | Android `assembleDebug assembleRelease` | Passed | Installable debug APK and unsigned release APK |
 | Android `lintDebug` | Passed, 0 errors / 8 warnings | Remaining warnings concern newer dependency versions, intentional bundled JavaScript, and debug-only untranslated test labels |
 | `npm run test:android` | Passed on API 35 emulator | Actual IME/editor connection, Shift/emoji/mode chooser, grapheme-aware deletion in the host editor, adjacent native framed inserts from one copy, automatic saved-key unlock after Lock, Keystore save/restore/delete, native Unicode passphrase → Web Crypto interoperability, hide-to-lock |
+| `scripts/test-release-android.mjs` (signed `0.2.0-rc.2` APK) | Passed on API 35 emulator | Exact signed APK: package/version, non-debuggable state, IME registration/selection, and same-signature reinstall |
 | Release manifest inspection | Passed | No INTERNET, no debug host, no debuggable flag; backups disabled and explicit transfer exclusions |
 | Swift parser and Xcode project plist checks | Passed | Syntax/project structure only, not iOS compilation |
 | Visual review | Desktop and mobile captured | `design/preview-desktop.png`, `design/preview-mobile.png` |
